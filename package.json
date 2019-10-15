@@ -1,7 +1,7 @@
 {
   "name": "@mojaloop/finance-portal-lib",
   "version": "0.0.1",
-  "description": "Shared code for finance portal backends",
+  "description": "Shared code for finance portal backends.",
   "license": "Apache-2.0",
   "contributors": [
     "Matt Kingston, ModusBox Inc."
