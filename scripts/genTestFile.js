@@ -7,18 +7,18 @@ const support = require('../test/_support');
 const accounts = require('./accounts.json');
 // accounts.json looks like:
 // {
-//     "MTN": "1234567890",
-//     "Orange": "1234567890"
+//     "dfsp1": "1234567890",
+//     "dfsp2": "1234567890"
 // }
 
 
 const input = support.genInput({ maxTx: 1, currency: () => 'XOF', fixed: 0 });
 
 const dfspConf = support.genDfspConf(input.participants);
-dfspConf[Object.keys(dfspConf)[0]].name = 'MTN mobile financial services';
-dfspConf[Object.keys(dfspConf)[0]].accountId = accounts.MTN;
-dfspConf[Object.keys(dfspConf)[1]].name = 'Orange Money Cote d\'Ivoire ( OMCI)';
-dfspConf[Object.keys(dfspConf)[1]].accountId = accounts.Orange;
+dfspConf[Object.keys(dfspConf)[0]].name = 'dfsp1 test fsp';
+dfspConf[Object.keys(dfspConf)[0]].accountId = accounts.dfsp1;
+dfspConf[Object.keys(dfspConf)[1]].name = 'dfsp2 test fsp';
+dfspConf[Object.keys(dfspConf)[1]].accountId = accounts.dfsp2;
 const template = xml2js(fs.readFileSync(path.resolve(__dirname, '../src/settlement/template_file.xml')).toString(), { compact: true });
 
 const result = js2xml(
