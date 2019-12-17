@@ -29,7 +29,7 @@ class SettlementsModel {
      */
     async getSettlements(query) {
         if (Object.keys(query).length === 0) {
-            throw new Error('getSettlements: query must contain at least one parameter');
+            return [];
         }
         const q = qs.stringify(query);
         try {
