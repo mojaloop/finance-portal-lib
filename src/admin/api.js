@@ -272,7 +272,7 @@ async function getFxpRatesForChannel(endpoint, channel, logger) {
     const rates = await get(`fxp/${channel.id}/rates`, { endpoint, logger });
 
     return {
-        channel: channel,
+        channel,
         rates: rates
     }
 }
