@@ -1,13 +1,25 @@
 {
   "extends": "airbnb-base",
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true
   },
   "rules": {
     "indent": [
       "error",
       4,
-      { "SwitchCase": 1 }
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "__set__",
+          "__get__"
+        ]
+      }
     ]
   }
 }

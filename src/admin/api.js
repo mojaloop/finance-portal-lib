@@ -212,11 +212,105 @@ async function setParticipantIsActiveFlag(endpoint, dfspName, value, logger) {
     return await put(buildUrl('participants', dfspName), payload, { endpoint, logger });
 }
 
+/**
+ * Communicates with the FXP API in order to fetch the FXP rates for all available currency channels .
+ *
+ * @method getFxpRatesPerCurrencyChannel
+ * @param {string} endpoint
+ * @param {object} logger
+ * @returns {object} An array of objects listing the exchange rates per currency channel, with this format:
+ *  {
+ *      <{string} the currency channel identifier. Format: concatenation of source and destination currencies, Example: "eurusd">: [
+ *          {
+ *              rate: <{int} The foreign exchange rate configured. The number of decimal points is provided in decimalRate.>,
+ *              decimalRate: <{int} The number of decimal points of the rate>,
+ *              startTime: <{string} The starting period during which the exchange rate can be applied to Forex transfers. Format: yyyy-MM-ddTHH:mm:ss.SSS[-HH:MM]>,
+ *              endTime: <{string} The ending period up to which the exchange rate can be applied to Forex transfers. Format: yyyy-MM-ddTHH:mm:ss.SSS[-HH:MM]>,
+ *              reuse: <{boolean} Whether to override the end date or not. When set to true and there is no other exchange rate valid at that point in time, it is expected that the exchange rate remains valid after the end date>
+ *          }
+ *      ]
+ *  }
+ */
+async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
+    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const ratesForAllCurrencyChannels = await Promise.all(currencyChannels.map(async (currencyChannel) => {
+        return await getFxpRatesForChannel(endpoint, currencyChannel, logger);
+    }));
+    const ratesPerCurrencyChannel = {};
+
+    ratesForAllCurrencyChannels.forEach((item) => {
+        if (item.rates != null) {
+            const customChannelIdentifier = buildCustomFxpChannelIdentifier(item.channel);
+
+            ratesPerCurrencyChannel[customChannelIdentifier] = buildCurrencyChannelRates(item.rates);
+        }
+    });
+
+    return ratesPerCurrencyChannel;
+}
+
+/**
+ * @method getFxpCurrencyChannels
+ * @private
+ * @param {string} endpoint
+ * @param {object} logger
+ * @returns {Promise<*>}
+ */
+async function getFxpCurrencyChannels(endpoint, logger) {
+    return await get('exchange-rates/channels', { endpoint, logger });
+}
+
+/**
+ * @method getFxpRatesForChannel
+ * @private
+ * @param {string} endpoint
+ * @param channel
+ * @param {object} logger
+ * @returns {object}
+ */
+async function getFxpRatesForChannel(endpoint, channel, logger) {
+    const rates = await get(`fxp/${channel.id}/rates`, { endpoint, logger });
+
+    return {
+        channel: channel,
+        rates: rates
+    }
+}
+
+/**
+ * @method buildCustomFxpChannelIdentifier
+ * @private
+ * @param {object} fxpCurrencyChannel
+ * @returns {string}
+ */
+function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
+    return fxpCurrencyChannel.sourceCurrency.toLowerCase() + fxpCurrencyChannel.destinationCurrency.toLowerCase();
+}
+
+/**
+ * @method buildCustomFxpChannelIdentifier
+ * @private
+ * @param rates
+ * @returns {object}
+ */
+function buildCurrencyChannelRates(rates) {
+    return rates.map((item) => {
+        return {
+            rate: item.rate,
+            decimalRate: item.decimalRate,
+            startTime: item.startTime,
+            endTime: item.endTime,
+            reuse: item.reuse
+        }
+    });
+}
+
 module.exports = {
     fundsInReserve,
     fundsOutPrepareReserve,
     getAccountById,
     getAccountByType,
+    getFxpRatesPerCurrencyChannel,
     getParticipantAccounts,
     getParticipantEmailAddresses,
     getNDC,
