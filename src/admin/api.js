@@ -273,7 +273,7 @@ async function getFxpRatesForChannel(endpoint, channel, logger) {
 
     return {
         channel,
-        rates: rates
+        rates,
     }
 }
 
