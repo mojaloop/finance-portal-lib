@@ -6,7 +6,6 @@
 const uuidv4 = require('uuid/v4');
 const { get, put, post, buildUrl } = require('../requests/requests');
 
-
 /**
  * Get account details
  *
@@ -250,6 +249,40 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
 }
 
 /**
+ * Communicates with the FXP API in order to create the FXP rate for the specified currency channel.
+ *
+ * @method createFxpRateForCurrencyChannel
+ * @param {string} endpoint
+ * @param {string} currencyPair
+ * @param {object} rateDetails
+ * @param {object} logger
+ * @returns {null}
+ */
+async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetails, logger) {
+    const sourceCurrency = extractSourceCurrency(currencyPair);
+    const destinationCurrency = extractDestinationCurrency(currencyPair);
+    const body = {
+        rate: rateDetails.rate,
+        decimalRate: rateDetails.decimalRate,
+        startTime: rateDetails.startTime,
+        endTime: rateDetails.endTime,
+        reuse: rateDetails.reuse,
+    };
+
+    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const targetChannel = currencyChannels.find((currencyChannel) => {
+        return currencyChannel.sourceCurrency.toLowerCase() === sourceCurrency.toLowerCase() &&
+        currencyChannel.destinationCurrency.toLowerCase() === destinationCurrency.toLowerCase();
+    });
+
+    if (targetChannel == null) {
+        throw new Error('FXP API error - Currency channel not found.');
+    }
+
+    return await post(`exchange-rates/channels/${targetChannel.id}`, body, {endpoint, logger});
+}
+
+/**
  * @method getFxpCurrencyChannels
  * @private
  * @param {string} endpoint
@@ -269,7 +302,7 @@ async function getFxpCurrencyChannels(endpoint, logger) {
  * @returns {object}
  */
 async function getFxpRatesForChannel(endpoint, channel, logger) {
-    const rates = await get(`fxp/${channel.id}/rates`, { endpoint, logger });
+    const rates = await get(`exchange-rates/channels/${channel.id}/rates`, { endpoint, logger });
 
     return {
         channel,
@@ -305,7 +338,28 @@ function buildCurrencyChannelRates(rates) {
     });
 }
 
+/**
+ * @method extractSourceCurrency
+ * @private
+ * @param {string} currencyPair
+ * @return {string}
+ */
+function extractSourceCurrency(currencyPair) {
+    return currencyPair.substring(0, 3);
+}
+
+/**
+ * @method extractDestinationCurrency
+ * @private
+ * @param {string} currencyPair
+ * @returns {string}
+ */
+function extractDestinationCurrency(currencyPair) {
+    return currencyPair.substring(3, 6);
+}
+
 module.exports = {
+    createFxpRateForCurrencyChannel,
     fundsInReserve,
     fundsOutPrepareReserve,
     getAccountById,
