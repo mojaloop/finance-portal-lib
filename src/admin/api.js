@@ -256,7 +256,7 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
  * @param {string} currencyPair
  * @param {object} rateDetails
  * @param {object} logger
- * @returns {null}
+ * @returns {Promise<*>} The result from the FXP API.
  */
 async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetails, logger) {
     const sourceCurrency = extractSourceCurrency(currencyPair);
