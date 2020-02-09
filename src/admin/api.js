@@ -253,7 +253,8 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
  *
  * @method createFxpRateForCurrencyChannel
  * @param {string} endpoint
- * @param {string} currencyPair
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
+ * string with format "<source><destination>", as in this example: "eurusd".
  * @param {object} rateDetails
  * @param {object} logger
  * @returns {Promise<*>} The result from the FXP API.
@@ -283,7 +284,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
 }
 
 /**
- * @method getFxpCurrencyChannels
+ * @function getFxpCurrencyChannels
  * @private
  * @param {string} endpoint
  * @param {object} logger
@@ -294,7 +295,7 @@ async function getFxpCurrencyChannels(endpoint, logger) {
 }
 
 /**
- * @method getFxpRatesForChannel
+ * @function getFxpRatesForChannel
  * @private
  * @param {string} endpoint
  * @param channel
@@ -311,7 +312,7 @@ async function getFxpRatesForChannel(endpoint, channel, logger) {
 }
 
 /**
- * @method buildCustomFxpChannelIdentifier
+ * @function buildCustomFxpChannelIdentifier
  * @private
  * @param {object} fxpCurrencyChannel
  * @returns {string}
@@ -321,7 +322,7 @@ function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
 }
 
 /**
- * @method buildCustomFxpChannelIdentifier
+ * @function buildCustomFxpChannelIdentifier
  * @private
  * @param rates
  * @returns {object}
@@ -339,9 +340,10 @@ function buildCurrencyChannelRates(rates) {
 }
 
 /**
- * @method extractSourceCurrency
+ * @function extractSourceCurrency
  * @private
- * @param {string} currencyPair
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
+ * string with format "<source><destination>", as in this example: "eurusd".
  * @return {string}
  */
 function extractSourceCurrency(currencyPair) {
@@ -349,9 +351,10 @@ function extractSourceCurrency(currencyPair) {
 }
 
 /**
- * @method extractDestinationCurrency
+ * @function extractDestinationCurrency
  * @private
- * @param {string} currencyPair
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
+ * string with format "<source><destination>", as in this example: "eurusd".
  * @returns {string}
  */
 function extractDestinationCurrency(currencyPair) {
