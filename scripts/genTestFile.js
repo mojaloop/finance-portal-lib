@@ -25,4 +25,5 @@ const result = js2xml(
     model.format(model.minPaymentsAlgorithm(input), dfspConf, template, 558),
     { compact: true, spaces: 2 },
 );
+// eslint-disable-next-line no-console
 console.log(result);
