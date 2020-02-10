@@ -4,4 +4,4 @@
 [![CircleCI](https://circleci.com/gh/mojaloop/finance-portal-lib.svg?style=svg)](https://circleci.com/gh/mojaloop/finance-portal-lib)
 [![NPM](https://nodei.co/npm/@mojaloop/finance-portal-lib.png)](https://nodei.co/npm/@mojaloop/finance-portal-lib/)
 
-Shared code for finance portal backends.
+Shared code for finance portal utilities.
