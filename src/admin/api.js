@@ -214,7 +214,7 @@ async function setParticipantIsActiveFlag(endpoint, dfspName, value, logger) {
 /**
  * Communicates with the FXP API in order to fetch the FXP rates for all available currency channels .
  *
- * @method getFxpRatesPerCurrencyChannel
+ * @function getFxpRatesPerCurrencyChannel
  * @param {string} endpoint
  * @param {object} logger
  * @returns {object} An array of objects listing the exchange rates per currency channel, with this format:
@@ -251,7 +251,7 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
 /**
  * Communicates with the FXP API in order to create the FXP rate for the specified currency channel.
  *
- * @method createFxpRateForCurrencyChannel
+ * @function createFxpRateForCurrencyChannel
  * @param {string} endpoint
  * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
  * string with format "<source><destination>", as in this example: "eurusd".
