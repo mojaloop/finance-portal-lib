@@ -1,10 +1,7 @@
-/* eslint-disable */
-// TODO: Remove previous line and work through linting issues at next edit
-
-'use strict';
-
 const uuidv4 = require('uuid/v4');
-const { get, put, post, buildUrl } = require('../requests/requests');
+const {
+    get, put, post, buildUrl,
+} = require('../requests/requests');
 
 /**
  * Get account details
@@ -14,7 +11,7 @@ const { get, put, post, buildUrl } = require('../requests/requests');
 async function getAccountById(endpoint, participantName, accountId, logger) {
     const accountIdNum = Number(accountId);
     const accounts = await getParticipantAccounts(endpoint, participantName, logger);
-    const account = accounts.find(a => a.id === accountIdNum);
+    const account = accounts.find((a) => a.id === accountIdNum);
     if (account === undefined) {
         throw new Error(`Couldn't find account with id ${accountId}`);
     }
@@ -24,14 +21,13 @@ async function getAccountById(endpoint, participantName, accountId, logger) {
 async function getAccountByType(endpoint, participantName, currency, accountType, logger) {
     const accounts = await getParticipantAccounts(endpoint, participantName, logger);
     const account = accounts
-                        .filter(a => a.currency === currency)
-                        .find(ac => ac.ledgerAccountType === accountType);
+        .filter((a) => a.currency === currency)
+        .find((ac) => ac.ledgerAccountType === accountType);
     if (account === undefined) {
         throw new Error(`Couldn't find account with id ${accountId}`);
     }
     return account;
 }
-
 
 
 /**
@@ -66,12 +62,12 @@ async function getParticipants(endpoint, logger) {
 
 /**
  * Gets a list of email addresses for a participant
- * 
+ *
  * @returns {object}
  */
 async function getParticipantEmailAddresses(endpoint, participantName, logger) {
     const participantEndpoints = await get(buildUrl('participants', participantName, 'endpoints'), { endpoint, logger });
-    const emailAddresses = participantEndpoints.filter(a => a.type.endsWith("_EMAIL"));
+    const emailAddresses = participantEndpoints.filter((a) => a.type.endsWith('_EMAIL'));
     return emailAddresses;
 }
 
@@ -80,8 +76,8 @@ async function getParticipantEmailAddresses(endpoint, participantName, logger) {
  * @returns {object}
  */
 async function updateEmailAddress(endpoint, dfspName, emailType, newEmailAddress, logger) {
-    const newEndPoint = { type : emailType, value : newEmailAddress };
-    return await post(buildUrl('participants', dfspName, 'endpoints'), newEndPoint , { endpoint, logger });
+    const newEndPoint = { type: emailType, value: newEmailAddress };
+    return await post(buildUrl('participants', dfspName, 'endpoints'), newEndPoint, { endpoint, logger });
 }
 
 
@@ -92,7 +88,7 @@ async function updateEmailAddress(endpoint, dfspName, emailType, newEmailAddress
  */
 async function getNDC(endpoint, dfspName, currency, logger) {
     const limits = await get(buildUrl('participants', dfspName, 'limits'), { endpoint, logger });
-    const ndc = limits.find(l => l.currency === currency && l.limit.type === 'NET_DEBIT_CAP');
+    const ndc = limits.find((l) => l.currency === currency && l.limit.type === 'NET_DEBIT_CAP');
     if (ndc === undefined) {
         throw new Error(`Couldn't find ${currency} net debit cap for participant ${dfspName}`);
     }
@@ -129,7 +125,7 @@ async function setNDC(endpoint, dfspName, currency, newAmount, logger) {
 async function getParticipantByAccountId(endpoint, accountId, logger) {
     const participants = await get('participants', { endpoint, logger });
     // match participant account id to get the fsp name
-    const fsp = participants.find(p => -1 !== p.accounts.findIndex(a => a.id === accountId));
+    const fsp = participants.find((p) => p.accounts.findIndex((a) => a.id === accountId) !== -1);
     if (fsp.name === undefined) {
         throw new Error(`Couldn't find fsp with account ID ${accountId}`);
     }
@@ -163,8 +159,8 @@ async function participantFundsOutPrepareReserve(endpoint, participantName, acco
         reason,
         amount: {
             amount,
-            currency
-        }
+            currency,
+        },
     }, { endpoint, logger });
     return { transferId };
 }
@@ -195,8 +191,8 @@ async function participantFundsInReserve(endpoint, participantName, accountId, a
         reason,
         amount: {
             amount,
-            currency
-        }
+            currency,
+        },
     }, { endpoint, logger });
     return { transferId };
 }
@@ -232,9 +228,7 @@ async function setParticipantIsActiveFlag(endpoint, dfspName, value, logger) {
  */
 async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
-    const ratesForAllCurrencyChannels = await Promise.all(currencyChannels.map(async (currencyChannel) => {
-        return await getFxpRatesForChannel(endpoint, currencyChannel, logger);
-    }));
+    const ratesForAllCurrencyChannels = await Promise.all(currencyChannels.map(async (currencyChannel) => await getFxpRatesForChannel(endpoint, currencyChannel, logger)));
     const ratesPerCurrencyChannel = {};
 
     ratesForAllCurrencyChannels.forEach((item) => {
@@ -253,7 +247,7 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
  *
  * @function createFxpRateForCurrencyChannel
  * @param {string} endpoint
- * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated
  * string with format "<source><destination>", as in this example: "eurusd".
  * @param {object} rateDetails
  * @param {object} logger
@@ -271,16 +265,14 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
     };
 
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
-    const targetChannel = currencyChannels.find((currencyChannel) => {
-        return currencyChannel.sourceCurrency.toLowerCase() === sourceCurrency.toLowerCase() &&
-        currencyChannel.destinationCurrency.toLowerCase() === destinationCurrency.toLowerCase();
-    });
+    const targetChannel = currencyChannels.find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase() === sourceCurrency.toLowerCase()
+        && currencyChannel.destinationCurrency.toLowerCase() === destinationCurrency.toLowerCase());
 
     if (targetChannel == null) {
         throw new Error('FXP API error - Currency channel not found.');
     }
 
-    return await post(`exchange-rates/channels/${targetChannel.id}`, body, {endpoint, logger});
+    return await post(`exchange-rates/channels/${targetChannel.id}`, body, { endpoint, logger });
 }
 
 /**
@@ -308,7 +300,7 @@ async function getFxpRatesForChannel(endpoint, channel, logger) {
     return {
         channel,
         rates,
-    }
+    };
 }
 
 /**
@@ -328,21 +320,19 @@ function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
  * @returns {object}
  */
 function buildCurrencyChannelRates(rates) {
-    return rates.map((item) => {
-        return {
-            rate: item.rate,
-            decimalRate: item.decimalRate,
-            startTime: item.startTime,
-            endTime: item.endTime,
-            reuse: item.reuse
-        }
-    });
+    return rates.map((item) => ({
+        rate: item.rate,
+        decimalRate: item.decimalRate,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        reuse: item.reuse,
+    }));
 }
 
 /**
  * @function extractSourceCurrency
  * @private
- * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated
  * string with format "<source><destination>", as in this example: "eurusd".
  * @return {string}
  */
@@ -353,7 +343,7 @@ function extractSourceCurrency(currencyPair) {
 /**
  * @function extractDestinationCurrency
  * @private
- * @param {string} currencyPair The currencies of the target channel, in a single concatenated 
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated
  * string with format "<source><destination>", as in this example: "eurusd".
  * @returns {string}
  */
@@ -378,5 +368,5 @@ module.exports = {
     participantFundsOutPrepareReserve,
     setNDC,
     setParticipantIsActiveFlag,
-    updateEmailAddress
+    updateEmailAddress,
 };
