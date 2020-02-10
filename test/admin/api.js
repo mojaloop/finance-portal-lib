@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const assert = require('assert');
 const rewire = require('rewire');
 const sinon = require('sinon');
