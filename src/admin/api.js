@@ -275,8 +275,8 @@ function buildCurrencyChannelRates(rates) {
 }
 
 /**
- * Communicates with the FXP API in order to fetch the FXP rates for all available currency
- * channels.
+ * Communicates with an external FX provider API in order to fetch the FX rates for all
+ * available currency channels.
  *
  * @function getFxpRatesPerCurrencyChannel
  * @param {string} endpoint
@@ -350,7 +350,8 @@ function extractDestinationCurrency(currencyPair) {
 }
 
 /**
- * Communicates with the FXP API in order to create the FXP rate for the specified currency channel.
+ * Communicates with an external FXP API in order to create the FXP rate for the specified
+ * currency channel.
  *
  * @function createFxpRateForCurrencyChannel
  * @param {string} endpoint
@@ -380,11 +381,33 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
     if (targetChannel == null) {
         throw new Error('FXP API error - Currency channel not found.');
     }
+
     const result = await post(`exchange-rates/channels/${targetChannel.id}`, body, { endpoint, logger });
+
+    return result;
+}
+
+/**
+ * Communicates with an external settlement API in order to commit the target settlement window.
+ *
+ * @function commitSettlementWindow
+ * @param {string} endpoint
+ * @param {number} settlementWindowId
+ * @param {object} logger
+ * @returns {Promise<*>} The result from the TMF API.
+ */
+async function commitSettlementWindow(endpoint, settlementWindowId, logger) {
+    const body = {
+        hubSettlementId: settlementWindowId,
+    };
+
+    const result = await post('settlement/phase-two', body, { endpoint, logger });
+
     return result;
 }
 
 module.exports = {
+    commitSettlementWindow,
     createFxpRateForCurrencyChannel,
     fundsInReserve,
     fundsOutPrepareReserve,

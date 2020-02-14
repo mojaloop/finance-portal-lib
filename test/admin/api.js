@@ -518,5 +518,66 @@ describe('API:', () => {
                 });
             });
         });
+        describe('commitSettlementWindow:', () => {
+            let mockData;
+            let postRestore;
+
+            const postStub = sinon.stub().resolves({ ok: true });
+
+            beforeEach(() => {
+                // re-define the mock data in each test's run, in order to avoid issues if
+                // a test case alters them.
+                mockData = {
+                    endpoint: 'http://fake-endpoint.mojaloop',
+                    logger: () => {},
+                    settlementWindowId: 12345,
+                };
+
+                postRestore = api.__set__('post', postStub);
+            });
+
+            afterEach(() => {
+                postRestore();
+            });
+
+            describe('Failures:', () => {
+                it('should throw an exception if `requests.post` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    postRestore = api.__set__('post', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.commitSettlementWindow(mockData.endpoint,
+                                mockData.settlementWindowId,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
+            });
+            describe('Success:', () => {
+                it('should return the result of the `requests.post` if it succeeds.', async () => {
+                    const expectedResult = { ok: true };
+                    const result = await api.commitSettlementWindow(mockData.endpoint,
+                        mockData.settlementWindowId,
+                        mockData.logger);
+
+                    assert.strictEqual(postStub.getCall(0).args[0], 'settlement/phase-two');
+                    assert.deepEqual(postStub.getCall(0).args[1], {
+                        hubSettlementId: mockData.settlementWindowId,
+                    });
+                    assert.deepEqual(postStub.getCall(0).args[2], {
+                        endpoint: mockData.endpoint,
+                        logger: mockData.logger,
+                    });
+                    assert.deepEqual(result, expectedResult);
+                });
+            });
+        });
     });
 });
