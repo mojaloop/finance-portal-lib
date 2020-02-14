@@ -388,7 +388,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
 }
 
 /**
- * Communicates with an external TMF API in order to commit the target settlement window.
+ * Communicates with an external settlement API in order to commit the target settlement window.
  *
  * @function commitSettlementWindow
  * @param {string} endpoint
