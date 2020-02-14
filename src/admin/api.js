@@ -275,7 +275,7 @@ function buildCurrencyChannelRates(rates) {
 }
 
 /**
- * Communicates with an external FXP API in order to fetch the FXP rates for all available currency
+ * Communicates with an external FX provider API in order to fetch the FX rates for all available currencies
  * channels.
  *
  * @function getFxpRatesPerCurrencyChannel
