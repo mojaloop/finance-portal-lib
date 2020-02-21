@@ -502,7 +502,7 @@ describe('API:', () => {
                         mockData.rateDetails,
                         mockData.logger);
 
-                    assert.strictEqual(postStub.getCall(0).args[0], 'exchange-rates/channels/0');
+                    assert.strictEqual(postStub.getCall(0).args[0], 'exchange-rates/channels/0/rates');
                     assert.deepEqual(postStub.getCall(0).args[1], {
                         rate: mockData.rateDetails.rate,
                         decimalRate: mockData.rateDetails.decimalRate,

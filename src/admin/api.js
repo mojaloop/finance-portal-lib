@@ -382,7 +382,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
         throw new Error('FXP API error - Currency channel not found.');
     }
 
-    const result = await post(`exchange-rates/channels/${targetChannel.id}`, body, { endpoint, logger });
+    const result = await post(`exchange-rates/channels/${targetChannel.id}/rates`, body, { endpoint, logger });
 
     return result;
 }
