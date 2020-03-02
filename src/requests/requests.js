@@ -106,11 +106,25 @@ async function post(url, body, opts) {
     }
 }
 
+async function del(url, opts) {
+    try {
+        const reqOpts = {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json', 'accept': 'application/json' }
+        };
+
+        return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
+    } catch (e) {
+        optLog(opts, util.format('Error attempting DELETE. URL:', url, 'Opts:', opts, 'Error:', e));
+        throw e;
+    }
+}
 
 module.exports = {
     get,
     put,
     post,
+    del,
     buildUrl,
     HTTPResponseError
 };
