@@ -431,7 +431,13 @@ async function deleteFxpCurrencyChannel(endpoint, currencyPair, logger) {
 async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, logger) {
     const sourceCurrency = extractSourceCurrency(currencyPair);
     const destinationCurrency = extractDestinationCurrency(currencyPair);
-    const body = { ...{ sourceCurrency: sourceCurrency.toUpperCase(), destinationCurrency: destinationCurrency.toUpperCase() }, ...channelDetails };
+    const body = {
+        ...{
+            sourceCurrency: sourceCurrency.toUpperCase(),
+            destinationCurrency: destinationCurrency.toUpperCase(),
+        },
+        ...channelDetails,
+    };
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
     const targetChannel = currencyChannels
         .find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase()
