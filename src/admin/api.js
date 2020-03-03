@@ -1,6 +1,6 @@
 const uuidv4 = require('uuid/v4');
 const {
-    get, put, post, buildUrl,
+    get, put, post, del, buildUrl,
 } = require('../requests/requests');
 
 /**
@@ -388,6 +388,69 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
 }
 
 /**
+ * Communicates with an external FXP API in order to delete the specified currency channel
+ *
+ * @function deleteFxpCurrencyChannel
+ * @param {string} endpoint
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated
+ * string with format "<source><destination>", as in this example: "eurusd".
+ * @param {object} logger
+ * @returns {Promise<*>} The result from the FXP API.
+ */
+async function deleteFxpCurrencyChannel(endpoint, currencyPair, logger) {
+    const sourceCurrency = extractSourceCurrency(currencyPair);
+    const destinationCurrency = extractDestinationCurrency(currencyPair);
+
+    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const targetChannel = currencyChannels
+        .find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase()
+            === sourceCurrency.toLowerCase()
+        && currencyChannel.destinationCurrency.toLowerCase() === destinationCurrency.toLowerCase());
+
+    if (targetChannel == null) {
+        return { ok: true };
+    }
+
+    const result = await del(`exchange-rates/channels/${targetChannel.id}`, { endpoint, logger });
+
+    return result;
+}
+
+/**
+ * Communicates with an external FXP API in order to create the specified
+ * currency channel.
+ *
+ * @function createFxpCurrencyChannel
+ * @param {string} endpoint
+ * @param {string} currencyPair The currencies of the target channel, in a single concatenated
+ * string with format "<source><destination>", as in this example: "eurusd".
+ * @param {object} channelDetails
+ * @param {object} logger
+ * @returns {Promise<*>} The result from the FXP API.
+ */
+async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, logger) {
+    const sourceCurrency = extractSourceCurrency(currencyPair);
+    const destinationCurrency = extractDestinationCurrency(currencyPair);
+    const body = {
+        sourceCurrency: sourceCurrency.toUpperCase(),
+        destinationCurrency: destinationCurrency.toUpperCase(),
+        ...channelDetails,
+    };
+    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const targetChannel = currencyChannels
+        .find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase()
+            === sourceCurrency.toLowerCase()
+        && currencyChannel.destinationCurrency.toLowerCase() === destinationCurrency.toLowerCase());
+
+    if (targetChannel != null) {
+        throw new Error('FXP API error - Currency channel already exists.');
+    }
+
+    const result = await post('exchange-rates/channels', body, { endpoint, logger });
+
+    return result;
+}
+/**
  * Communicates with an external settlement API in order to commit the target settlement window.
  *
  * @function commitSettlementWindow
@@ -408,7 +471,9 @@ async function commitSettlementWindow(endpoint, settlementWindowId, logger) {
 
 module.exports = {
     commitSettlementWindow,
+    createFxpCurrencyChannel,
     createFxpRateForCurrencyChannel,
+    deleteFxpCurrencyChannel,
     fundsInReserve,
     fundsOutPrepareReserve,
     getAccountById,

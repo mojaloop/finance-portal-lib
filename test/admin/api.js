@@ -518,6 +518,240 @@ describe('API:', () => {
                 });
             });
         });
+        describe('createFxpCurrencyChannel:', () => {
+            let mockData;
+            let extractSourceCurrencyRestore;
+            let extractDestinationCurrencyRestore;
+            let getFxpCurrencyChannelsRestore;
+            let postRestore;
+
+            const postStub = sinon.stub().resolves({ ok: true });
+
+            beforeEach(() => {
+                // re-define the mock data in each test's run, in order to avoid issues if
+                // a test case alters them.
+                mockData = {
+                    currencyChannels: [
+                        {
+                            sourceCurrency: 'EUR',
+                            destinationCurrency: 'MAD',
+                            status: 'Suspended',
+                            id: 0,
+                            createdBy: 'string',
+                            createdDate: 'string',
+                        },
+                        {
+                            sourceCurrency: 'MAD',
+                            destinationCurrency: 'EUR',
+                            status: 'Active',
+                            id: 1,
+                            createdBy: 'string',
+                            createdDate: 'string',
+                        },
+                    ],
+                    currencyPair: 'eurmad',
+                    destinationCurrency: 'mad',
+                    endpoint: 'http://fake-endpoint.mojaloop',
+                    logger: () => {},
+                    channelDetails: {
+                        status: 'Approved',
+                    },
+                    sourceCurrency: 'eur',
+                };
+                // stub all private functions that are used inside the method, in order to avoid
+                // duplication of code. Re-stub each one individually only when needed in each test.
+                extractSourceCurrencyRestore = api.__set__('extractSourceCurrency', sinon.stub().returns(mockData.sourceCurrency));
+                extractDestinationCurrencyRestore = api.__set__('extractDestinationCurrency', sinon.stub().returns(mockData.destinationCurrency));
+                getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', sinon.stub().resolves([]));
+
+                postRestore = api.__set__('post', postStub);
+            });
+
+            afterEach(() => {
+                // restore all stubbed functions to their originals
+                extractSourceCurrencyRestore();
+                extractDestinationCurrencyRestore();
+                getFxpCurrencyChannelsRestore();
+                postRestore();
+            });
+
+            describe('Failures:', () => {
+                it('should throw an exception if `extractSourceCurrency` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    extractSourceCurrencyRestore = api.__set__('extractSourceCurrency', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.createFxpCurrencyChannel(mockData.endpoint,
+                                mockData.currencyPair,
+                                mockData.channelDetails,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
+                it('should throw an exception if `extractDestinationCurrency` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    extractDestinationCurrencyRestore = api.__set__('extractDestinationCurrency', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.createFxpCurrencyChannel(mockData.endpoint,
+                                mockData.currencyPair,
+                                mockData.channelDetails,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
+                it('should throw an exception if `getFxpCurrencyChannels` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.createFxpCurrencyChannel(mockData.endpoint,
+                                mockData.currencyPair,
+                                mockData.channelDetails,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
+                it('should throw an exception if `getFxpCurrencyChannels` retuns channel for requested currency channel.', async () => {
+                    getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', sinon.stub().resolves(mockData.currencyChannels));
+                    const fakeError = new Error('FXP API error - Currency channel already exists.');
+
+                    await assert.rejects(
+                        async () => {
+                            await api.createFxpCurrencyChannel(mockData.endpoint,
+                                mockData.currencyPair,
+                                mockData.channelDetails,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
+            });
+            describe('Success:', () => {
+                it('should return the result of the `requests.post` if it succeeds.', async () => {
+                    const expectedResult = { ok: true };
+                    const result = await api.createFxpCurrencyChannel(mockData.endpoint,
+                        mockData.currencyPair,
+                        mockData.channelDetails,
+                        mockData.logger);
+
+                    assert.strictEqual(postStub.getCall(0).args[0], 'exchange-rates/channels');
+                    assert.deepEqual(postStub.getCall(0).args[1], {
+                        sourceCurrency: mockData.sourceCurrency.toUpperCase(),
+                        destinationCurrency: mockData.destinationCurrency.toUpperCase(),
+                        status: mockData.channelDetails.status,
+                    });
+                    assert.deepEqual(postStub.getCall(0).args[2], {
+                        endpoint: mockData.endpoint,
+                        logger: mockData.logger,
+                    });
+                    assert.deepEqual(result, expectedResult);
+                });
+            });
+        });
+        describe('deleteFxpCurrencyChannel:', () => {
+            let mockData;
+            let getFxpCurrencyChannelsRestore;
+            let delRestore;
+
+            const delStub = sinon.stub().resolves({ ok: true });
+
+            beforeEach(() => {
+                // re-define the mock data in each test's run, in order to avoid issues if
+                // a test case alters them.
+                mockData = {
+                    currencyChannels: [
+                        {
+                            sourceCurrency: 'EUR',
+                            destinationCurrency: 'MAD',
+                            status: 'Approved',
+                            id: 0,
+                            createdBy: 'string',
+                            createdDate: 'string',
+                        },
+                        {
+                            sourceCurrency: 'MAD',
+                            destinationCurrency: 'EUR',
+                            status: 'Suspended',
+                            id: 1,
+                            createdBy: 'string',
+                            createdDate: 'string',
+                        },
+                    ],
+                    customChannelIdentifiers: ['eurmad', 'madeur'],
+                    endpoint: 'http://fake-endpoint.mojaloop',
+                    logger: {},
+                };
+                // stub all private functions that are used inside the method, in order to avoid
+                // duplication of code. Re-stub each one individually only when needed in each test.
+                getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', sinon.stub().resolves(mockData.currencyChannels));
+                delRestore = api.__set__('del', delStub);
+            });
+
+            afterEach(() => {
+                // restore all stubbed functions to their originals
+                getFxpCurrencyChannelsRestore();
+                delRestore();
+            });
+
+            describe('Failures:', () => {
+                it('should throw an exception if `getFxpCurrencyChannels` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.deleteFxpCurrencyChannel(mockData.endpoint,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
+            });
+            describe('Success:', () => {
+                it('should return success if currency channel is deleted successfully', async () => {
+                    const result = await api.deleteFxpCurrencyChannel(mockData.endpoint,
+                        mockData.logger);
+                    assert.deepEqual(result, { ok: true });
+                });
+            });
+            it('should return success if channel does not exist.', async () => {
+                getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', sinon.stub().resolves([]));
+
+                const result = await api.deleteFxpCurrencyChannel(mockData.endpoint,
+                    mockData.logger);
+                assert.deepEqual(result, { ok: true });
+            });
+        });
         describe('commitSettlementWindow:', () => {
             let mockData;
             let postRestore;
