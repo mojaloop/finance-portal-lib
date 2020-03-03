@@ -432,10 +432,8 @@ async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, 
     const sourceCurrency = extractSourceCurrency(currencyPair);
     const destinationCurrency = extractDestinationCurrency(currencyPair);
     const body = {
-        ...{
-            sourceCurrency: sourceCurrency.toUpperCase(),
-            destinationCurrency: destinationCurrency.toUpperCase(),
-        },
+        sourceCurrency: sourceCurrency.toUpperCase(),
+        destinationCurrency: destinationCurrency.toUpperCase(),
         ...channelDetails,
     };
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
