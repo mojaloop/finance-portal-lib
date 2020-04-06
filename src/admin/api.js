@@ -259,7 +259,7 @@ function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
 }
 
 /**
- * @function buildCustomFxpChannelIdentifier
+ * @function buildCurrencyChannelRates
  * @private
  * @param rates
  * @returns {object}
@@ -370,6 +370,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
         startTime: rateDetails.startTime,
         endTime: rateDetails.endTime,
         reuse: rateDetails.reuse,
+        forexProviderInfo: rateDetails.forexProviderInfo || {},
     };
 
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
