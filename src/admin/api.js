@@ -364,17 +364,6 @@ function extractDestinationCurrency(currencyPair) {
 function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
     const sourceCurrency = extractSourceCurrency(currencyPair);
 
-    const RATE_ID_PER_CURRENCY_PAIR = {
-        EURMAD: '43',
-    };
-
-    const TENOR_VALUES = {
-        ON: 'ON', // Same-day settlement.
-        TN: 'TN', //  T+1 settlement, where T = date of order execution.
-        SP: 'SP', // T+2 settlement, where T = date of order execution.
-        BROKEN: 'BROKEN', // Variable date.
-    };
-
     function getBidSpotRate(rate, decimalPlaces) {
         const integerPart = rate.slice(0, rate.length - decimalPlaces);
         const decimalPart = rate.slice(rate.length - decimalPlaces);
@@ -383,7 +372,18 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
     }
 
     switch (forexProviderName) {
-        case FOREX_PROVIDERS.CITI:
+        case FOREX_PROVIDERS.CITI: {
+            const RATE_ID_PER_CURRENCY_PAIR = {
+                EURMAD: '43',
+            };
+
+            const TENOR_VALUES = {
+                ON: 'ON', // Same-day settlement.
+                TN: 'TN', //  T+1 settlement, where T = date of order execution.
+                SP: 'SP', // T+2 settlement, where T = date of order execution.
+                BROKEN: 'BROKEN', // Variable date.
+            };
+
             /**
              * rateSetId {String} - Unique identifier for each set of rates. ^[0-9]{1,10}$
              * currencyPair {String} - Identifies the currency pair in 6 characters.
@@ -429,6 +429,7 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
                 isValid: 'true', // Currently this must always be 'true'
                 isTradable: 'true', // Currently this must always be 'true'
             };
+        }
         default:
             return {};
     }
