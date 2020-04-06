@@ -3,6 +3,10 @@ const {
     get, put, post, del, buildUrl,
 } = require('../requests/requests');
 
+const FOREX_PROVIDERS = {
+    CITI: 'citi',
+};
+
 /**
  * Get all participant accounts
  *
@@ -350,6 +354,87 @@ function extractDestinationCurrency(currencyPair) {
 }
 
 /**
+ * Generates the required object structure for a ForEx provider.
+ * @function getForexProviderInfo
+ * @param {String} forexProviderName
+ * @param {String} currencyPair
+ * @param {Object} rateDetails
+ * @returns {Object}
+ */
+function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
+    const sourceCurrency = extractSourceCurrency(currencyPair);
+
+    const RATE_ID_PER_CURRENCY_PAIR = {
+        EURMAD: '43',
+    };
+
+    const TENOR_VALUES = {
+        ON: 'ON', // Same-day settlement.
+        TN: 'TN', //  T+1 settlement, where T = date of order execution.
+        SP: 'SP', // T+2 settlement, where T = date of order execution.
+        BROKEN: 'BROKEN', // Variable date.
+    };
+
+    function getBidSpotRate(rate, decimalPlaces) {
+        const integerPart = rate.slice(0, rate.length - decimalPlaces);
+        const decimalPart = rate.slice(rate.length - decimalPlaces);
+
+        return `${integerPart}.${decimalPart}`;
+    }
+
+    switch (forexProviderName) {
+        case FOREX_PROVIDERS.CITI:
+            /**
+             * rateSetId {String} - Unique identifier for each set of rates. ^[0-9]{1,10}$
+             * currencyPair {String} - Identifies the currency pair in 6 characters.
+             *      The currency codes defined in ISO 4217 as three-letter alphabetic codes are
+             *      used for each member of the currency pair. ^[A-Z]{6}$
+             * baseCurrency {String} - The base currency of the currency pair. ^[A-Z]{3}$
+             * ratePrecision {String} - The number of decimal places to which this currency pair is
+             *      quoted by the partner bank. NOTE: Use this if the base currency is EUR.
+             *      It should be the same as the decimalRate.
+             * invRatePrecision {String} - Used when exchange rates are stored both ways.
+             *      NOTE: Currently not used.
+             * tenor {String} - tenor must be TN
+             * valueDate {String} - The value date for the rate as per the partner bank.
+             *      NOTE: This is currently not mandatory. It can be null or not present.
+             * bidSpotRate {String} The rate where the partner bank buys the base currency at.
+             *      NOTE: Currently, this must be the same as rate but with the decimal point.
+             * offerSpotRate {String} - The rate where the partner bank sells the base currency at.
+             *      NOTE: This is currently not in use.
+             * midPrice {String} - The rate that is at the middle of both the bid and the offer.
+             *      NOTE: This is currently not in use.
+             * validUntilTime {String} - Time and date that this rate will expire.
+             *      Excludes grace period. Format: yyyy-MM-dd HH:mm:ss.SSS in UTC time.
+             *      NOTE: Currently, this must be the same as endTime but in a different format.
+             *      ^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(\.\d{3})?$
+             * isValid {String} - Indicator that the partner bank was able to provide the rate.
+             *      NOTE: Currently this must always be 'true' or 'TRUE'.
+             * isTradable {String} - A flag to indicate that the currency pair is tradeable.
+             *      NOTE: Currently this must always be 'true' or 'TRUE'.
+             */
+            return {
+                rateSetId: RATE_ID_PER_CURRENCY_PAIR[currencyPair.toUpperCase()],
+                currencyPair: currencyPair.toUpperCase(),
+                baseCurrency: sourceCurrency.toUpperCase(),
+                ratePrecision: rateDetails.decimalRate,
+                invRatePrecision: '1', // This is currently not in use.
+                tenor: TENOR_VALUES.TN, // Since payment settlement happens on T+1,
+                // where T = date of order execution, tenor must be TN.
+                valueDate: null, // This is currently not in use.
+                bidSpotRate: getBidSpotRate(rateDetails.rate.toString(), rateDetails.decimalRate),
+                offerSpotRate: '0.0000', // This is currently not in use.
+                midPrice: '0.0000', // This is currently not in use.
+                validUntilTime: rateDetails.endTime.replace('T', ' ').replace('Z', ''),
+                isValid: 'true', // Currently this must always be 'true'
+                isTradable: 'true', // Currently this must always be 'true'
+            };
+        default:
+            return {};
+    }
+}
+
+/**
  * Communicates with an external FXP API in order to create the FXP rate for the specified
  * currency channel.
  *
@@ -370,7 +455,8 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
         startTime: rateDetails.startTime,
         endTime: rateDetails.endTime,
         reuse: rateDetails.reuse,
-        forexProviderInfo: rateDetails.forexProviderInfo || {},
+        forexProviderInfo: rateDetails.forexProviderInfo
+          || getForexProviderInfo(FOREX_PROVIDERS.CITI),
     };
 
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
