@@ -219,6 +219,7 @@ describe('API:', () => {
             });
             describe('Success:', () => {
                 it('returns a correctly formatted string.', () => {
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 0), '123456');
                     assert.strictEqual(api.__get__('buildDecimalRate')('123456', 1), '12345.6');
                     assert.strictEqual(api.__get__('buildDecimalRate')('123456', 2), '1234.56');
                     assert.strictEqual(api.__get__('buildDecimalRate')('123456', 3), '123.456');
@@ -227,6 +228,19 @@ describe('API:', () => {
                     assert.strictEqual(api.__get__('buildDecimalRate')('123456', 6), '0.123456');
                     assert.strictEqual(api.__get__('buildDecimalRate')('123456', 7), '0.123456');
                     assert.strictEqual(api.__get__('buildDecimalRate')('123456', 100), '0.123456');
+
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 0), '100');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 1), '10.0');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 2), '1.00');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 3), '0.100');
+
+                    assert.strictEqual(api.__get__('buildDecimalRate')('10000', 4), '1.0000');
+
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 0), '1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 1), '0.1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 2), '0.1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 3), '0.1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 4), '0.1');
                 });
             });
         });
