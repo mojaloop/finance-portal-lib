@@ -354,6 +354,19 @@ function extractDestinationCurrency(currencyPair) {
 }
 
 /**
+ * @function buildDecimalRate
+ * @param {String} rate
+ * @param {Number} decimalPlaces
+ * @returns {String}
+ */
+function buildDecimalRate(rate, decimalPlaces) {
+    const integerPart = rate.slice(0, rate.length - decimalPlaces);
+    const decimalPart = rate.slice(rate.length - decimalPlaces);
+
+    return `${integerPart}.${decimalPart}`;
+}
+
+/**
  * Generates the required object structure for a ForEx provider.
  * @function getForexProviderInfo
  * @param {String} forexProviderName
@@ -362,15 +375,6 @@ function extractDestinationCurrency(currencyPair) {
  * @returns {Object}
  */
 function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
-    const sourceCurrency = extractSourceCurrency(currencyPair);
-
-    function getBidSpotRate(rate, decimalPlaces) {
-        const integerPart = rate.slice(0, rate.length - decimalPlaces);
-        const decimalPart = rate.slice(rate.length - decimalPlaces);
-
-        return `${integerPart}.${decimalPart}`;
-    }
-
     switch (forexProviderName) {
         case FOREX_PROVIDERS.CITI: {
             const RATE_ID_PER_CURRENCY_PAIR = {
@@ -416,13 +420,13 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
             return {
                 rateSetId: RATE_ID_PER_CURRENCY_PAIR[currencyPair.toUpperCase()],
                 currencyPair: currencyPair.toUpperCase(),
-                baseCurrency: sourceCurrency.toUpperCase(),
+                baseCurrency: extractSourceCurrency(currencyPair).toUpperCase(),
                 ratePrecision: rateDetails.decimalRate,
                 invRatePrecision: '1', // This is currently not in use.
                 tenor: TENOR_VALUES.TN, // Since payment settlement happens on T+1,
                 // where T = date of order execution, tenor must be TN.
                 valueDate: null, // This is currently not in use.
-                bidSpotRate: getBidSpotRate(rateDetails.rate.toString(), rateDetails.decimalRate),
+                bidSpotRate: buildDecimalRate(rateDetails.rate.toString(), rateDetails.decimalRate),
                 offerSpotRate: '0.0000', // This is currently not in use.
                 midPrice: '0.0000', // This is currently not in use.
                 validUntilTime: rateDetails.endTime.replace('T', ' ').replace('Z', ''),
