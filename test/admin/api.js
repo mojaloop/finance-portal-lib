@@ -418,6 +418,23 @@ describe('API:', () => {
                     },
                     sourceCurrency: 'eur',
                 };
+
+                mockData.forexProviderInfo = {
+                    rateSetId: 43,
+                    currencyPair: mockData.currencyPair.toUpperCase(),
+                    baseCurrency: mockData.sourceCurrency.toUpperCase(),
+                    ratePrecision: mockData.rateDetails.decimalRate,
+                    invRatePrecision: '1',
+                    tenor: 'TN',
+                    valueDate: null,
+                    bidSpotRate: '66.6667',
+                    offerSpotRate: '0.0000',
+                    midPrice: '0.0000',
+                    validUntilTime: '2019-09-04 12:00:00.000',
+                    isValid: 'true',
+                    isTradable: 'true',
+                };
+
                 // stub all private functions that are used inside the method, in order to avoid
                 // duplication of code. Re-stub each one individually only when needed in each test.
                 extractSourceCurrencyRestore = api.__set__('extractSourceCurrency', sinon.stub().returns(mockData.sourceCurrency));
@@ -493,6 +510,26 @@ describe('API:', () => {
                         },
                     );
                 });
+
+                it('should throw an exception if `getForexProviderInfo` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    getFxpCurrencyChannelsRestore = api.__set__('getForexProviderInfo', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.createFxpRateForCurrencyChannel(mockData.endpoint,
+                                mockData.currencyPair,
+                                mockData.rateDetails,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
             });
             describe('Success:', () => {
                 it('should return the result of the `requests.post` if it succeeds.', async () => {
@@ -509,6 +546,7 @@ describe('API:', () => {
                         startTime: mockData.rateDetails.startTime,
                         endTime: mockData.rateDetails.endTime,
                         reuse: mockData.rateDetails.reuse,
+                        forexProviderInfo: mockData.forexProviderInfo,
                     });
                     assert.deepEqual(postStub.getCall(0).args[2], {
                         endpoint: mockData.endpoint,
