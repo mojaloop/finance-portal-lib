@@ -489,19 +489,21 @@ describe('API:', () => {
                 };
 
                 mockData.forexProviderInfo = {
-                    rateSetId: 43,
-                    currencyPair: mockData.currencyPair.toUpperCase(),
-                    baseCurrency: mockData.sourceCurrency.toUpperCase(),
-                    ratePrecision: mockData.rateDetails.decimalRate,
-                    invRatePrecision: '1',
-                    tenor: 'TN',
-                    valueDate: null,
-                    bidSpotRate: '66.6667',
-                    offerSpotRate: '0.0000',
-                    midPrice: '0.0000',
-                    validUntilTime: '2019-09-04 12:00:00.000',
-                    isValid: 'true',
-                    isTradable: 'true',
+                    citi: {
+                        rateSetId: 43,
+                        currencyPair: mockData.currencyPair.toUpperCase(),
+                        baseCurrency: mockData.sourceCurrency.toUpperCase(),
+                        ratePrecision: mockData.rateDetails.decimalRate,
+                        invRatePrecision: '1',
+                        tenor: 'TN',
+                        valueDate: null,
+                        bidSpotRate: '66.6667',
+                        offerSpotRate: '0.0000',
+                        midPrice: '0.0000',
+                        validUntilTime: '2019-09-04 12:00:00.000',
+                        isValid: 'true',
+                        isTradable: 'true',
+                    },
                 };
 
                 // stub all private functions that are used inside the method, in order to avoid

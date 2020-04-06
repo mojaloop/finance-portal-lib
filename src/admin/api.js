@@ -364,11 +364,9 @@ function buildDecimalRate(rate, decimalPlaces) {
         throw new Error('Invalid arguments.');
     }
 
-    let position = rate.length - decimalPlaces;
-
-    if (position <= 0) {
-        position = 0;
-    }
+    const position = rate.length - decimalPlaces < 0
+        ? 0
+        : rate.length - decimalPlaces;
 
     const integerPart = rate.slice(0, position) || 0;
     const decimalPart = rate.slice(position);
@@ -428,20 +426,23 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
              *      NOTE: Currently this must always be 'true' or 'TRUE'.
              */
             return {
-                rateSetId: RATE_ID_PER_CURRENCY_PAIR[currencyPair.toUpperCase()],
-                currencyPair: currencyPair.toUpperCase(),
-                baseCurrency: extractSourceCurrency(currencyPair).toUpperCase(),
-                ratePrecision: rateDetails.decimalRate,
-                invRatePrecision: '1', // This is currently not in use.
-                tenor: TENOR_VALUES.TN, // Since payment settlement happens on T+1,
-                // where T = date of order execution, tenor must be TN.
-                valueDate: null, // This is currently not in use.
-                bidSpotRate: buildDecimalRate(rateDetails.rate.toString(), rateDetails.decimalRate),
-                offerSpotRate: '0.0000', // This is currently not in use.
-                midPrice: '0.0000', // This is currently not in use.
-                validUntilTime: rateDetails.endTime.replace('T', ' ').replace('Z', ''),
-                isValid: 'true', // Currently this must always be 'true'
-                isTradable: 'true', // Currently this must always be 'true'
+                citi: {
+                    rateSetId: RATE_ID_PER_CURRENCY_PAIR[currencyPair.toUpperCase()],
+                    currencyPair: currencyPair.toUpperCase(),
+                    baseCurrency: extractSourceCurrency(currencyPair).toUpperCase(),
+                    ratePrecision: rateDetails.decimalRate,
+                    invRatePrecision: '1', // This is currently not in use.
+                    tenor: TENOR_VALUES.TN, // Since payment settlement happens on T+1,
+                    // where T = date of order execution, tenor must be TN.
+                    valueDate: null, // This is currently not in use.
+                    bidSpotRate: buildDecimalRate(rateDetails.rate.toString(),
+                        rateDetails.decimalRate),
+                    offerSpotRate: '0.0000', // This is currently not in use.
+                    midPrice: '0.0000', // This is currently not in use.
+                    validUntilTime: rateDetails.endTime.replace('T', ' ').replace('Z', ''),
+                    isValid: 'true', // Currently this must always be 'true'
+                    isTradable: 'true', // Currently this must always be 'true'
+                },
             };
         }
         default:
