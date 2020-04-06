@@ -364,6 +364,10 @@ function buildDecimalRate(rate, decimalPlaces) {
         throw new Error('Invalid arguments.');
     }
 
+    if (decimalPlaces === 0) {
+        return rate;
+    }
+
     const position = rate.length - decimalPlaces < 0
         ? 0
         : rate.length - decimalPlaces;
