@@ -161,8 +161,77 @@ describe('API:', () => {
                 });
             });
         });
+        describe('buildDecimalRate:', () => {
+            const validRate = '123456';
+            const validDecimalPlaces = 4;
+
+            describe('Failures:', () => {
+                it('throws an exception if the first argument is not a valid string (null).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(null, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (number).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(12345, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (function).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(() => {}, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (object).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')({}, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (array).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')([], validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (null).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, null);
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (string).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, 'foo');
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (function).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, () => {});
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (object).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, {});
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (array).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, []);
+                    });
+                });
+            });
+            describe('Success:', () => {
+                it('returns a correctly formatted string.', () => {
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 1), '12345.6');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 2), '1234.56');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 3), '123.456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 4), '12.3456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 5), '1.23456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 6), '0.123456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 7), '0.123456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 100), '0.123456');
+                });
+            });
+        });
     });
-    describe('Public methods:', () => {
+    describe('Public functions:', () => {
         describe('getFxpRatesPerCurrencyChannel:', () => {
             let mockData;
             let getFxpCurrencyChannelsRestore;

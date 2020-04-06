@@ -360,8 +360,18 @@ function extractDestinationCurrency(currencyPair) {
  * @returns {String}
  */
 function buildDecimalRate(rate, decimalPlaces) {
-    const integerPart = rate.slice(0, rate.length - decimalPlaces);
-    const decimalPart = rate.slice(rate.length - decimalPlaces);
+    if (typeof rate !== 'string' || typeof decimalPlaces !== 'number') {
+        throw new Error('Invalid arguments.');
+    }
+
+    let position = rate.length - decimalPlaces;
+
+    if (position <= 0) {
+        position = 0;
+    }
+
+    const integerPart = rate.slice(0, position) || 0;
+    const decimalPart = rate.slice(position);
 
     return `${integerPart}.${decimalPart}`;
 }
