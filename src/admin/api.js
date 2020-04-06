@@ -457,7 +457,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
         endTime: rateDetails.endTime,
         reuse: rateDetails.reuse,
         forexProviderInfo: rateDetails.forexProviderInfo
-          || getForexProviderInfo(FOREX_PROVIDERS.CITI),
+          || getForexProviderInfo(FOREX_PROVIDERS.CITI, currencyPair, rateDetails),
     };
 
     const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
