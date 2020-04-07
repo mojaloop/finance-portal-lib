@@ -434,11 +434,11 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
                     rateSetId: RATE_ID_PER_CURRENCY_PAIR[currencyPair.toUpperCase()],
                     currencyPair: currencyPair.toUpperCase(),
                     baseCurrency: extractSourceCurrency(currencyPair).toUpperCase(),
-                    ratePrecision: rateDetails.decimalRate,
+                    ratePrecision: rateDetails.decimalRate.toString(),
                     invRatePrecision: '1', // This is currently not in use.
                     tenor: TENOR_VALUES.TN, // Since payment settlement happens on T+1,
                     // where T = date of order execution, tenor must be TN.
-                    valueDate: null, // This is currently not in use.
+                    valueDate: '0000-00-00', // This is currently not in use.
                     bidSpotRate: buildDecimalRate(rateDetails.rate.toString(),
                         rateDetails.decimalRate),
                     offerSpotRate: '0.0000', // This is currently not in use.

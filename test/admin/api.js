@@ -504,13 +504,13 @@ describe('API:', () => {
 
                 mockData.forexProviderInfo = {
                     citi: {
-                        rateSetId: 43,
+                        rateSetId: '43',
                         currencyPair: mockData.currencyPair.toUpperCase(),
                         baseCurrency: mockData.sourceCurrency.toUpperCase(),
-                        ratePrecision: mockData.rateDetails.decimalRate,
+                        ratePrecision: mockData.rateDetails.decimalRate.toString(),
                         invRatePrecision: '1',
                         tenor: 'TN',
-                        valueDate: null,
+                        valueDate: '0000-00-00',
                         bidSpotRate: '66.6667',
                         offerSpotRate: '0.0000',
                         midPrice: '0.0000',
