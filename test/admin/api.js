@@ -161,8 +161,91 @@ describe('API:', () => {
                 });
             });
         });
+        describe('buildDecimalRate:', () => {
+            const validRate = '123456';
+            const validDecimalPlaces = 4;
+
+            describe('Failures:', () => {
+                it('throws an exception if the first argument is not a valid string (null).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(null, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (number).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(12345, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (function).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(() => {}, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (object).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')({}, validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the first argument is not a valid string (array).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')([], validDecimalPlaces);
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (null).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, null);
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (string).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, 'foo');
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (function).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, () => {});
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (object).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, {});
+                    });
+                });
+                it('throws an exception if the second argument is not a valid number (array).', () => {
+                    assert.throws(() => {
+                        api.__get__('buildDecimalRate')(validRate, []);
+                    });
+                });
+            });
+            describe('Success:', () => {
+                it('returns a correctly formatted string.', () => {
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 0), '123456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 1), '12345.6');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 2), '1234.56');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 3), '123.456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 4), '12.3456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 5), '1.23456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 6), '0.123456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 7), '0.123456');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('123456', 100), '0.123456');
+
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 0), '100');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 1), '10.0');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 2), '1.00');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('100', 3), '0.100');
+
+                    assert.strictEqual(api.__get__('buildDecimalRate')('10000', 4), '1.0000');
+
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 0), '1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 1), '0.1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 2), '0.1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 3), '0.1');
+                    assert.strictEqual(api.__get__('buildDecimalRate')('1', 4), '0.1');
+                });
+            });
+        });
     });
-    describe('Public methods:', () => {
+    describe('Public functions:', () => {
         describe('getFxpRatesPerCurrencyChannel:', () => {
             let mockData;
             let getFxpCurrencyChannelsRestore;
@@ -418,6 +501,25 @@ describe('API:', () => {
                     },
                     sourceCurrency: 'eur',
                 };
+
+                mockData.forexProviderInfo = {
+                    citi: {
+                        rateSetId: '43',
+                        currencyPair: mockData.currencyPair.toUpperCase(),
+                        baseCurrency: mockData.sourceCurrency.toUpperCase(),
+                        ratePrecision: mockData.rateDetails.decimalRate.toString(),
+                        invRatePrecision: '1',
+                        tenor: 'TN',
+                        valueDate: '0000-00-00',
+                        bidSpotRate: '66.6667',
+                        offerSpotRate: '0.0000',
+                        midPrice: '0.0000',
+                        validUntilTime: '2019-09-04 12:00:00.000',
+                        isValid: 'true',
+                        isTradable: 'true',
+                    },
+                };
+
                 // stub all private functions that are used inside the method, in order to avoid
                 // duplication of code. Re-stub each one individually only when needed in each test.
                 extractSourceCurrencyRestore = api.__set__('extractSourceCurrency', sinon.stub().returns(mockData.sourceCurrency));
@@ -493,6 +595,26 @@ describe('API:', () => {
                         },
                     );
                 });
+
+                it('should throw an exception if `getForexProviderInfo` fails.', async () => {
+                    const fakeError = new Error('foo');
+                    const stub = sinon.stub().throws(fakeError);
+
+                    getFxpCurrencyChannelsRestore = api.__set__('getForexProviderInfo', stub);
+
+                    await assert.rejects(
+                        async () => {
+                            await api.createFxpRateForCurrencyChannel(mockData.endpoint,
+                                mockData.currencyPair,
+                                mockData.rateDetails,
+                                mockData.logger);
+                        },
+                        {
+                            name: fakeError.name,
+                            message: fakeError.message,
+                        },
+                    );
+                });
             });
             describe('Success:', () => {
                 it('should return the result of the `requests.post` if it succeeds.', async () => {
@@ -509,6 +631,7 @@ describe('API:', () => {
                         startTime: mockData.rateDetails.startTime,
                         endTime: mockData.rateDetails.endTime,
                         reuse: mockData.rateDetails.reuse,
+                        forexProviderInfo: mockData.forexProviderInfo,
                     });
                     assert.deepEqual(postStub.getCall(0).args[2], {
                         endpoint: mockData.endpoint,

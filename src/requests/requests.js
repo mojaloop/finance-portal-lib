@@ -44,7 +44,7 @@ const optLog = (opts, ...args) => {
     }
 };
 
-const throwOrJson = async (res, msg = 'HTTP request returned error response') => {
+const throwOrJson = async (res, msg = `HTTP request ${res.url} returned error response ${res.status}`) => {
     if (res.headers.get('content-length') === '0' || res.status === 204) {
         return null;
     }
