@@ -1,3 +1,4 @@
+const assert = require('assert').strict;
 const uuidv4 = require('uuid/v4');
 const {
     get, put, post, del, buildUrl,
@@ -360,9 +361,8 @@ function extractDestinationCurrency(currencyPair) {
  * @returns {String}
  */
 function buildDecimalRate(rate, decimalPlaces) {
-    if (typeof rate !== 'string' || typeof decimalPlaces !== 'number') {
-        throw new Error('Invalid arguments.');
-    }
+    assert(typeof rate === 'string', '`rate` must be a string.');
+    assert(typeof decimalPlaces === 'number', '`decimalPlaces` must be a number.');
 
     if (decimalPlaces === 0) {
         return rate;
