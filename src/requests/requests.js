@@ -1,13 +1,12 @@
-/* eslint-disable */
-// TODO: Remove previous line and work through linting issues at next edit
-
-'use strict';
-
 const fetch = require('node-fetch');
 const util = require('util');
 
-
 const respErrSym = Symbol('ResponseErrorDataSym');
+
+const DEFAULT_HEADERS = {
+    accept: 'application/json',
+    'content-type': 'application/json',
+};
 
 class HTTPResponseError extends Error {
     constructor(params) {
@@ -33,8 +32,8 @@ class HTTPResponseError extends Error {
 // stripped strings with a forward-slash between them. If the last string ended with a
 // forward-slash, append that to the result.
 const buildUrl = (...args) => args
-    .filter(e => e !== undefined)
-    .map(s => s.replace(/(^\/*|\/*$)/g, '')) /* This comment works around a problem with editor syntax highglighting */
+    .filter((e) => e !== undefined)
+    .map((s) => s.replace(/(^\/*|\/*$)/g, '')) /* This comment works around a problem with editor syntax highglighting */
     .join('/')
     + ((args[args.length - 1].slice(-1) === '/') ? '/' : '');
 
@@ -64,7 +63,7 @@ async function get(url, opts) {
     try {
         const reqOpts = {
             method: 'GET',
-            headers: { 'content-type': 'application/json', 'accept': 'application/json' }
+            headers: opts.headers || DEFAULT_HEADERS,
         };
 
         return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
@@ -79,8 +78,8 @@ async function put(url, body, opts) {
     try {
         const reqOpts = {
             method: 'PUT',
-            headers: { 'content-type': 'application/json', 'accept': 'application/json' },
-            body: JSON.stringify(body)
+            headers: opts.headers || DEFAULT_HEADERS,
+            body: opts.json === false ? body : JSON.stringify(body),
         };
 
         return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
@@ -95,8 +94,8 @@ async function post(url, body, opts) {
     try {
         const reqOpts = {
             method: 'POST',
-            headers: { 'content-type': 'application/json', 'accept': 'application/json' },
-            body: JSON.stringify(body)
+            headers: opts.headers || DEFAULT_HEADERS,
+            body: opts.json === false ? body : JSON.stringify(body),
         };
 
         return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
@@ -110,7 +109,7 @@ async function del(url, opts) {
     try {
         const reqOpts = {
             method: 'DELETE',
-            headers: { 'content-type': 'application/json', 'accept': 'application/json' }
+            headers: opts.headers || DEFAULT_HEADERS,
         };
 
         return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
@@ -126,5 +125,5 @@ module.exports = {
     post,
     del,
     buildUrl,
-    HTTPResponseError
+    HTTPResponseError,
 };
