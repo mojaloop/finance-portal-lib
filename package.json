@@ -1,6 +1,6 @@
 {
   "name": "@mojaloop/finance-portal-lib",
-  "version": "0.0.10-snapshot",
+  "version": "0.0.11-snapshot",
   "description": "Shared code for finance portal backends.",
   "license": "Apache-2.0",
   "contributors": [
@@ -24,10 +24,11 @@
     "ava": "1.0.0-rc.2",
     "chance": "1.0.16",
     "decimal.js": "10.0.1",
-    "eslint": "^6.1.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.1",
-    "mocha": "7.0.1",
+    "eslint": "6.1.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-plugin-import": "2.20.1",
+    "mocha": "7.2.0",
+    "npm-audit-resolver": "2.2.0",
     "rewire": "4.0.1",
     "sinon": "8.1.1"
   },
@@ -37,9 +38,11 @@
     "src/settlement/template_file.xml"
   ],
   "scripts": {
+    "test": "ava ./test/minPayments.js && mocha ./test/admin --bail --timeout 10000",
+    "fileTest": "node scripts/genTestFile.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "ava ./test/minPayments.js && mocha ./test/admin --bail --timeout 10000",
-    "fileTest": "node scripts/genTestFile.js"
+    "audit:resolve": "SHELL=sh resolve-audit && sed -i 's/: \"^/: \"/' package.json",
+    "audit:check": "SHELL=sh check-audit"
   }
 }
