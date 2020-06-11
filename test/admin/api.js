@@ -45,52 +45,6 @@ describe('API:', () => {
                 });
             });
         });
-        describe('buildCurrencyChannelRates:', () => {
-            describe('Failures:', () => {
-                it('throws an exception if the incoming parameter is not a valid array (number).', () => {
-                    assert.throws(() => {
-                        api.__get__('buildCurrencyChannelRates')(123);
-                    });
-                });
-                it('throws an exception if the incoming parameter is not a valid array (string).', () => {
-                    assert.throws(() => {
-                        api.__get__('buildCurrencyChannelRates')('foo');
-                    });
-                });
-                it('throws an exception if the incoming parameter is not a valid array (function).', () => {
-                    assert.throws(() => {
-                        api.__get__('buildCurrencyChannelRates')(() => {});
-                    });
-                });
-                it('throws an exception if the incoming parameter is not a valid array (object).', () => {
-                    assert.throws(() => {
-                        api.__get__('buildCurrencyChannelRates')({});
-                    });
-                });
-            });
-            describe('Success:', () => {
-                it('returns a valid array of objects extracted from the incoming array.', () => {
-                    const rates = [{
-                        rate: 6666680,
-                        decimalRate: 4,
-                        startTime: '2019-09-04T12:00:00.000Z',
-                        endTime: '2019-09-05T12:00:00.000Z',
-                        reuse: true,
-                        somethingElse1: 'does not matter',
-                        somethingElse2: 'does not matter',
-                    }];
-                    const expectedResult = [{
-                        rate: rates[0].rate,
-                        decimalRate: rates[0].decimalRate,
-                        startTime: rates[0].startTime,
-                        endTime: rates[0].endTime,
-                        reuse: rates[0].reuse,
-                    }];
-
-                    assert.deepEqual(api.__get__('buildCurrencyChannelRates')(rates), expectedResult);
-                });
-            });
-        });
         describe('extractSourceCurrency:', () => {
             describe('Failures:', () => {
                 it('throws an exception if the incoming parameter is not a valid string (null).', () => {
@@ -251,7 +205,6 @@ describe('API:', () => {
             let getFxpCurrencyChannelsRestore;
             let getFxpRatesForChannelRestore;
             let buildCustomFxpChannelIdentifierRestore;
-            let buildCurrencyChannelRatesRestore;
 
             beforeEach(() => {
                 // re-define the mock data in each test's run, in order to avoid issues if
@@ -314,7 +267,6 @@ describe('API:', () => {
                         .returns(mockData.customChannelIdentifiers[0])
                         .onSecondCall()
                         .returns(mockData.customChannelIdentifiers[1]));
-                buildCurrencyChannelRatesRestore = api.__set__('buildCurrencyChannelRates', sinon.stub().returns(mockData.fxpRates));
             });
 
             afterEach(() => {
@@ -322,7 +274,6 @@ describe('API:', () => {
                 getFxpCurrencyChannelsRestore();
                 getFxpRatesForChannelRestore();
                 buildCustomFxpChannelIdentifierRestore();
-                buildCurrencyChannelRatesRestore();
             });
 
             describe('Failures:', () => {
@@ -379,24 +330,6 @@ describe('API:', () => {
                         },
                     );
                 });
-
-                it('should throw an exception if `buildCurrencyChannelRates` fails.', async () => {
-                    const fakeError = new Error('foo');
-                    const stub = sinon.stub().throws(fakeError);
-
-                    buildCurrencyChannelRatesRestore = api.__set__('buildCurrencyChannelRates', stub);
-
-                    await assert.rejects(
-                        async () => {
-                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                                mockData.logger);
-                        },
-                        {
-                            name: fakeError.name,
-                            message: fakeError.message,
-                        },
-                    );
-                });
             });
             describe('Success:', () => {
                 it('should return an empty object if `getFxpCurrencyChannels` returns an empty result', async () => {
@@ -422,38 +355,6 @@ describe('API:', () => {
                         mockData.logger);
 
                     assert.deepEqual(result, {});
-                });
-
-                it('should return a valid non empty object if `getFxpCurrencyChannels` returns only one channel '
-                    + 'and `getFxpRatesForChannel` returns a none empty result for it.', async () => {
-                    const stub1 = sinon.stub().resolves([mockData.currencyChannels[0]]);
-                    const stub2 = sinon.stub().resolves({
-                        channel: mockData.currencyChannels[0],
-                        rates: mockData.fxpRates[0],
-                    });
-
-                    getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', stub1);
-                    getFxpRatesForChannelRestore = api.__set__('getFxpRatesForChannel', stub2);
-
-                    const expectedResult = {
-                        [mockData.customChannelIdentifiers[0]]: mockData.fxpRates,
-                    };
-                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
-
-                    assert.deepEqual(result, expectedResult);
-                });
-
-                it('should return a valid non empty object if `getFxpCurrencyChannels` returns multiple channels '
-                    + 'and `getFxpRatesForChannel` returns a none empty result for them.', async () => {
-                    const expectedResult = {
-                        [mockData.customChannelIdentifiers[0]]: mockData.fxpRates,
-                        [mockData.customChannelIdentifiers[1]]: mockData.fxpRates,
-                    };
-                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
-
-                    assert.deepEqual(result, expectedResult);
                 });
             });
         });
