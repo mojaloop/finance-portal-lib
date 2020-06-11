@@ -1,0 +1,16 @@
+{
+  "decisions": {
+    "1500|ava>meow>yargs-parser": {
+      "decision": "ignore",
+      "madeAt": 1591871535758,
+      "expiresAt": 1592476329895
+    },
+    "1500|npm-audit-resolver>audit-resolve-core>yargs-parser": {
+      "decision": "ignore",
+      "madeAt": 1591871539390,
+      "expiresAt": 1592476329895
+    }
+  },
+  "rules": {},
+  "version": 1
+}
