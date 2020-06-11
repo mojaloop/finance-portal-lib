@@ -370,10 +370,6 @@ function buildDecimalRate(rate, decimalPlaces) {
 function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
     switch (forexProviderName) {
         case FOREX_PROVIDERS.CITI: {
-            const RATE_ID_PER_CURRENCY_PAIR = {
-                EURMAD: '43',
-            };
-
             const TENOR_VALUES = {
                 ON: 'ON', // Same-day settlement.
                 TN: 'TN', //  T+1 settlement, where T = date of order execution.
@@ -412,7 +408,7 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
              */
             return {
                 citi: {
-                    rateSetId: RATE_ID_PER_CURRENCY_PAIR[currencyPair.toUpperCase()],
+                    rateSetId: rateDetails.rateSetId,
                     currencyPair: currencyPair.toUpperCase(),
                     baseCurrency: extractSourceCurrency(currencyPair).toUpperCase(),
                     ratePrecision: rateDetails.decimalRate.toString(),

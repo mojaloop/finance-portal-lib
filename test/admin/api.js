@@ -396,6 +396,7 @@ describe('API:', () => {
                     rateDetails: {
                         rate: 666667,
                         decimalRate: 4,
+                        rateSetId: '43',
                         startTime: '2019-09-03T12:00:00.000Z',
                         endTime: '2019-09-04T12:00:00.000Z',
                         reuse: true,
