@@ -306,7 +306,7 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
     ratesForAllCurrencyChannels.forEach((item) => {
         if (item.rates != null) {
             const customChannelIdentifier = buildCustomFxpChannelIdentifier(item.channel);
-            ratesPerCurrencyChannel[customChannelIdentifier] = item.rates
+            ratesPerCurrencyChannel[customChannelIdentifier] = item.rates;
         }
     });
 
