@@ -264,22 +264,6 @@ function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
 }
 
 /**
- * @function buildCurrencyChannelRates
- * @private
- * @param rates
- * @returns {object}
- */
-function buildCurrencyChannelRates(rates) {
-    return rates.map((item) => ({
-        rate: item.rate,
-        decimalRate: item.decimalRate,
-        startTime: item.startTime,
-        endTime: item.endTime,
-        reuse: item.reuse,
-    }));
-}
-
-/**
  * Communicates with an external FX provider API in order to fetch the FX rates for all
  * available currency channels.
  *
@@ -322,10 +306,7 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
     ratesForAllCurrencyChannels.forEach((item) => {
         if (item.rates != null) {
             const customChannelIdentifier = buildCustomFxpChannelIdentifier(item.channel);
-
-            ratesPerCurrencyChannel[customChannelIdentifier] = buildCurrencyChannelRates(
-                item.rates,
-            );
+            ratesPerCurrencyChannel[customChannelIdentifier] = item.rates;
         }
     });
 
