@@ -254,12 +254,12 @@ describe('API:', () => {
                         .onFirstCall()
                         .resolves({
                             channel: mockData.currencyChannels[0],
-                            rates: mockData.fxpRates[0],
+                            rates: [mockData.fxpRates[0]],
                         })
                         .onSecondCall()
                         .resolves({
                             channel: mockData.currencyChannels[1],
-                            rates: mockData.fxpRates[1],
+                            rates: [mockData.fxpRates[1]],
                         }));
                 buildCustomFxpChannelIdentifierRestore = api.__set__('buildCustomFxpChannelIdentifier',
                     sinon.stub()
@@ -355,6 +355,40 @@ describe('API:', () => {
                         mockData.logger);
 
                     assert.deepEqual(result, {});
+                });
+
+                it('should return a valid non empty object if `getFxpCurrencyChannels` returns only one channel '
+                    + 'and `getFxpRatesForChannel` returns a none empty result for it.', async () => {
+                    const stub1 = sinon.stub().resolves([mockData.currencyChannels[0]]);
+                    const stub2 = sinon.stub().resolves({
+                        channel: mockData.currencyChannels[0],
+                        rates: [mockData.fxpRates[0]],
+                    });
+
+                    getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', stub1);
+                    getFxpRatesForChannelRestore = api.__set__('getFxpRatesForChannel', stub2);
+
+                    const expectedResult = {
+                        [mockData.customChannelIdentifiers[0]]: [mockData.fxpRates[0]],
+                    };
+                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
+                        mockData.logger);
+
+                    assert.deepEqual(result, expectedResult);
+                });
+
+                it('should return a valid non empty object if `getFxpCurrencyChannels` returns multiple channels '
+                    + 'and `getFxpRatesForChannel` returns a none empty result for them.', async () => {
+                    const expectedResult = {
+                        // expected values based on the the stubbing definitions in `beforeEach` for
+                        // `getFxpCurrencyChannels` and `getFxpRatesForChannel`
+                        [mockData.customChannelIdentifiers[0]]: [mockData.fxpRates[0]],
+                        [mockData.customChannelIdentifiers[1]]: [mockData.fxpRates[1]],
+                    };
+                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
+                        mockData.logger);
+
+                    assert.deepEqual(result, expectedResult);
                 });
             });
         });
