@@ -1,10 +1,11 @@
 {
   "name": "@mojaloop/finance-portal-lib",
-  "version": "0.0.13-snapshot",
+  "version": "0.0.14-snapshot",
   "description": "Shared code for finance portal backends.",
   "license": "Apache-2.0",
   "contributors": [
-    "Matt Kingston, ModusBox Inc."
+    "Matt Kingston, ModusBox Inc.",
+    "Kamuela Franco <kamuela.franco@modusbox.com>"
   ],
   "main": "src/index.js",
   "repository": {
@@ -27,6 +28,7 @@
     "eslint": "6.1.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.20.1",
+    "jest": "^26.1.0",
     "mocha": "7.2.0",
     "npm-audit-resolver": "2.2.0",
     "rewire": "4.0.1",
@@ -38,7 +40,8 @@
     "src/settlement/template_file.xml"
   ],
   "scripts": {
-    "test": "ava ./test/minPayments.js && mocha ./test/admin --bail --timeout 10000",
+    "test": "ava ./test/minPayments.js && mocha ./test/admin --bail --timeout 10000 && jest test/",
+    "test:watch": "jest test/ --watch",
     "fileTest": "node scripts/genTestFile.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
