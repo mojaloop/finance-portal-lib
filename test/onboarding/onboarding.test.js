@@ -2,7 +2,7 @@ const { Headers } = require('node-fetch');
 const {
     sendRequest,
     settlementIdFromHubAccounts,
-    getHubAccounts,
+    getDfspAccounts,
     addDfsp,
     addInitialPositionAndLimits,
     depositFunds,
@@ -77,7 +77,7 @@ describe('Onboarding', () => {
         });
     });
 
-    describe('getHubAccounts', () => {
+    describe('getDfspAccounts', () => {
         it('should return args to get a DFSP\'s accounts on the hub', () => {
             // Arrange
             const dfspName = 'payerfsp';
@@ -100,7 +100,7 @@ describe('Onboarding', () => {
             ];
 
             // Act
-            const actual = getHubAccounts({
+            const actual = getDfspAccounts({
                 dfspName,
                 authToken,
                 hostCentralLedger,

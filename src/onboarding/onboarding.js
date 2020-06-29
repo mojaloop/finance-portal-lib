@@ -39,7 +39,7 @@ const settlementIdFromHubAccounts = (hubAccounts, dfspCurrency) => hubAccounts
  * ß
  * @returns {array} url, requestOptions
  */
-function getHubAccounts({
+function getDfspAccounts({
     dfspName,
     authToken,
     hostCentralLedger,
@@ -908,7 +908,7 @@ function setEmailNetDebitCapThresholdBreach({
 module.exports = {
     sendRequest,
     settlementIdFromHubAccounts,
-    getHubAccounts,
+    getDfspAccounts,
     addDfsp,
     addInitialPositionAndLimits,
     depositFunds,
