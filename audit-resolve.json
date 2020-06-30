@@ -2,13 +2,13 @@
   "decisions": {
     "1500|ava>meow>yargs-parser": {
       "decision": "ignore",
-      "madeAt": 1591871535758,
-      "expiresAt": 1592476329895
+      "madeAt": 1593517938682,
+      "expiresAt": 1596109929764
     },
     "1500|npm-audit-resolver>audit-resolve-core>yargs-parser": {
       "decision": "ignore",
-      "madeAt": 1591871539390,
-      "expiresAt": 1592476329895
+      "madeAt": 1593517941106,
+      "expiresAt": 1596109929764
     }
   },
   "rules": {},

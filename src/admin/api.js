@@ -563,6 +563,7 @@ module.exports = {
     getAccountById,
     getAccountByType,
     getForexProviderInfo,
+    getFxpCurrencyChannels,
     getFxpRatesPerCurrencyChannel,
     getParticipantAccounts,
     getParticipantEmailAddresses,
