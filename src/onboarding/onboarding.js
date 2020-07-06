@@ -11,7 +11,7 @@ const { Headers } = fetch;
  * @returns {Promise<void>} The result of the sent request
  */
 async function sendRequest(request, fetchFunc = fetch) {
-    await fetchFunc(...request);
+    return fetchFunc(...request);
 }
 
 /**
