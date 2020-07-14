@@ -231,8 +231,6 @@ function depositFunds({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.dfspPartyId
- * @param {string} [options.dfspPartyIdType]
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -243,8 +241,6 @@ function depositFunds({
 function addCallbackParticipantPut({
     dfspName,
     dfspCallbackUrl,
-    dfspPartyId,
-    dfspPartyIdType = 'msisdn',
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -255,7 +251,7 @@ function addCallbackParticipantPut({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/participants/${dfspPartyIdType}/${dfspPartyId}`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/participants/{{partyIdType}}/{{partyIdentifier}}`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_PUT',
@@ -282,8 +278,6 @@ function addCallbackParticipantPut({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.dfspPartyId
- * @param {string} [options.dfspPartyIdType]
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -294,8 +288,6 @@ function addCallbackParticipantPut({
 function addCallbackParticipantPutError({
     dfspName,
     dfspCallbackUrl,
-    dfspPartyId,
-    dfspPartyIdType,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -306,7 +298,7 @@ function addCallbackParticipantPutError({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/participants/${dfspPartyIdType}/${dfspPartyId}/error`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/participants/{{partyIdType}}/{{partyIdentifier}}/error`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_PUT_ERROR',
@@ -333,7 +325,6 @@ function addCallbackParticipantPutError({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.requestId A UUID v4 string
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -344,7 +335,6 @@ function addCallbackParticipantPutError({
 function addCallbackParticipantPutBatch({
     dfspName,
     dfspCallbackUrl,
-    requestId,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -355,7 +345,7 @@ function addCallbackParticipantPutBatch({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/participants/${requestId}`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/participants/{{requestId}}`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT',
@@ -382,7 +372,6 @@ function addCallbackParticipantPutBatch({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.requestId A UUID v4 string
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -393,7 +382,6 @@ function addCallbackParticipantPutBatch({
 function addCallbackParticipantPutBatchError({
     dfspName,
     dfspCallbackUrl,
-    requestId,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -404,7 +392,7 @@ function addCallbackParticipantPutBatchError({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/participants/${requestId}/error`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/participants/{{requestId}}/error`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT_ERROR',
@@ -431,8 +419,6 @@ function addCallbackParticipantPutBatchError({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.dfspPartyId
- * @param {string} [options.dfspPartyIdType]
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -443,8 +429,6 @@ function addCallbackParticipantPutBatchError({
 function addCallbackPartiesGet({
     dfspName,
     dfspCallbackUrl,
-    dfspPartyId,
-    dfspPartyIdType,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -455,7 +439,7 @@ function addCallbackPartiesGet({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/parties/${dfspPartyIdType}/${dfspPartyId}`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/parties/{{partyIdType}}/{{partyIdentifier}}`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTIES_GET',
@@ -482,8 +466,6 @@ function addCallbackPartiesGet({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.dfspPartyId
- * @param {string} [options.dfspPartyIdType]
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -494,8 +476,6 @@ function addCallbackPartiesGet({
 function addCallbackPartiesPut({
     dfspName,
     dfspCallbackUrl,
-    dfspPartyId,
-    dfspPartyIdType,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -506,7 +486,7 @@ function addCallbackPartiesPut({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/parties/${dfspPartyIdType}/${dfspPartyId}`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/parties/{{partyIdType}}/{{partyIdentifier}}`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTIES_PUT',
@@ -533,8 +513,6 @@ function addCallbackPartiesPut({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.dfspPartyId
- * @param {string} [options.dfspPartyIdType]
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -545,8 +523,6 @@ function addCallbackPartiesPut({
 function addCallbackPartiesPutError({
     dfspName,
     dfspCallbackUrl,
-    dfspPartyId,
-    dfspPartyIdType,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -557,7 +533,7 @@ function addCallbackPartiesPutError({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/parties/${dfspPartyIdType}/${dfspPartyId}/error`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/parties/{{partyIdType}}/{{partyIdentifier}}/error`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_PARTIES_PUT_ERROR',
@@ -676,7 +652,6 @@ function addCallbackTransferPost({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.transferId A UUID v4 string to identify the transfer
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -687,7 +662,6 @@ function addCallbackTransferPost({
 function addCallbackTransferPut({
     dfspName,
     dfspCallbackUrl,
-    transferId,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
     authToken, fspiopSource = 'hub_operator',
@@ -697,7 +671,7 @@ function addCallbackTransferPut({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/transfers/${transferId}`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/transfers/{{transferId}}`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_TRANSFER_PUT',
@@ -724,7 +698,6 @@ function addCallbackTransferPut({
  * @param options
  * @param {string} options.dfspName
  * @param {string} options.dfspCallbackUrl
- * @param {string} options.transferId A UUID v4 string to identify the transfer
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
  * @param {string} [options.baseCentralLedgerAdmin]
@@ -735,7 +708,6 @@ function addCallbackTransferPut({
 function addCallbackTransferError({
     dfspName,
     dfspCallbackUrl,
-    transferId,
     authToken,
     hostCentralLedger,
     baseCentralLedgerAdmin = '/admin/1.0',
@@ -746,7 +718,7 @@ function addCallbackTransferError({
     headers.append('FSPIOP-Source', fspiopSource);
     headers.append('Authorization', `Bearer ${authToken}`);
 
-    const fullCallbackUrl = `${dfspCallbackUrl}/transfers/${transferId}/error`;
+    const fullCallbackUrl = `${dfspCallbackUrl}/transfers/{{transferId}}/error`;
 
     const body = JSON.stringify({
         type: 'FSPIOP_CALLBACK_URL_TRANSFER_ERROR',

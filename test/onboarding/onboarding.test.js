@@ -208,7 +208,7 @@ describe('Onboarding', () => {
     });
 
     describe('depositFunds', () => {
-        it('should return args to', () => {
+        it('should return args to deposit funds to a DFSP\'s account', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCurrency = 'XOF';
@@ -269,12 +269,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackParticipantPut', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for participant PUT', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const dfspPartyId = 'i_am_a_msisdn';
-            const dfspPartyIdType = 'msisdn';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -286,7 +284,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_PUT',
-                value: 'http://dfsp/participants/msisdn/i_am_a_msisdn',
+                value: 'http://dfsp/participants/{{partyIdType}}/{{partyIdentifier}}',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -302,8 +300,6 @@ describe('Onboarding', () => {
             const actual = addCallbackParticipantPut({
                 dfspName,
                 dfspCallbackUrl,
-                dfspPartyId,
-                dfspPartyIdType,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -316,7 +312,7 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackParticipantPutError', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for participant PUT error', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
@@ -333,7 +329,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_PUT_ERROR',
-                value: 'http://dfsp/participants/msisdn/i_am_a_msisdn/error',
+                value: 'http://dfsp/participants/{{partyIdType}}/{{partyIdentifier}}/error',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -363,11 +359,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackParticipantPutBatch', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for participant PUT batch', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const requestId = 'dee18631-6c40-438a-bdd0-67bac5e4e1c2';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -379,7 +374,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT',
-                value: 'http://dfsp/participants/dee18631-6c40-438a-bdd0-67bac5e4e1c2',
+                value: 'http://dfsp/participants/{{requestId}}',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -395,7 +390,6 @@ describe('Onboarding', () => {
             const actual = addCallbackParticipantPutBatch({
                 dfspName,
                 dfspCallbackUrl,
-                requestId,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -408,11 +402,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackParticipantPutBatchError', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for participant PUT batch error', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const requestId = 'dee18631-6c40-438a-bdd0-67bac5e4e1c2';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -424,7 +417,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT_ERROR',
-                value: 'http://dfsp/participants/dee18631-6c40-438a-bdd0-67bac5e4e1c2/error',
+                value: 'http://dfsp/participants/{{requestId}}/error',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -440,7 +433,6 @@ describe('Onboarding', () => {
             const actual = addCallbackParticipantPutBatchError({
                 dfspName,
                 dfspCallbackUrl,
-                requestId,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -453,12 +445,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackPartiesGet', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for parties GET', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const dfspPartyId = 'i_am_a_msisdn';
-            const dfspPartyIdType = 'msisdn';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -470,7 +460,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTIES_GET',
-                value: 'http://dfsp/parties/msisdn/i_am_a_msisdn',
+                value: 'http://dfsp/parties/{{partyIdType}}/{{partyIdentifier}}',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -486,8 +476,6 @@ describe('Onboarding', () => {
             const actual = addCallbackPartiesGet({
                 dfspName,
                 dfspCallbackUrl,
-                dfspPartyId,
-                dfspPartyIdType,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -500,12 +488,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackPartiesPut', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for parties PUT', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const dfspPartyId = 'i_am_a_msisdn';
-            const dfspPartyIdType = 'msisdn';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -517,7 +503,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTIES_PUT',
-                value: 'http://dfsp/parties/msisdn/i_am_a_msisdn',
+                value: 'http://dfsp/parties/{{partyIdType}}/{{partyIdentifier}}',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -533,8 +519,6 @@ describe('Onboarding', () => {
             const actual = addCallbackPartiesPut({
                 dfspName,
                 dfspCallbackUrl,
-                dfspPartyId,
-                dfspPartyIdType,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -547,12 +531,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackPartiesPutError', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for parties PUT error', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const dfspPartyId = 'i_am_a_msisdn';
-            const dfspPartyIdType = 'msisdn';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -564,7 +546,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_PARTIES_PUT_ERROR',
-                value: 'http://dfsp/parties/msisdn/i_am_a_msisdn/error',
+                value: 'http://dfsp/parties/{{partyIdType}}/{{partyIdentifier}}/error',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -580,8 +562,6 @@ describe('Onboarding', () => {
             const actual = addCallbackPartiesPutError({
                 dfspName,
                 dfspCallbackUrl,
-                dfspPartyId,
-                dfspPartyIdType,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -594,7 +574,7 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackQuotes', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for quotes', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
@@ -637,7 +617,7 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackTransferPost', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for transfer POST', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
@@ -680,11 +660,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackTransferPut', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for transfer PUT', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const transferId = 'dee18631-6c40-438a-bdd0-67bac5e4e1c2';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -696,7 +675,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_TRANSFER_PUT',
-                value: 'http://dfsp/transfers/dee18631-6c40-438a-bdd0-67bac5e4e1c2',
+                value: 'http://dfsp/transfers/{{transferId}}',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -712,7 +691,6 @@ describe('Onboarding', () => {
             const actual = addCallbackTransferPut({
                 dfspName,
                 dfspCallbackUrl,
-                transferId,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -725,11 +703,10 @@ describe('Onboarding', () => {
     });
 
     describe('addCallbackTransferError', () => {
-        it('should return args to', () => {
+        it('should return args to add callback for transfer error', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const dfspCallbackUrl = 'http://dfsp';
-            const transferId = 'dee18631-6c40-438a-bdd0-67bac5e4e1c2';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
             const baseCentralLedgerAdmin = '/admin/1.0';
@@ -741,7 +718,7 @@ describe('Onboarding', () => {
             const headers = new Headers(headersMap);
             const body = JSON.stringify({
                 type: 'FSPIOP_CALLBACK_URL_TRANSFER_ERROR',
-                value: 'http://dfsp/transfers/dee18631-6c40-438a-bdd0-67bac5e4e1c2/error',
+                value: 'http://dfsp/transfers/{{transferId}}/error',
             });
             const expected = [
                 'http://localhost/admin/1.0/participants/payerfsp/endpoints',
@@ -757,7 +734,6 @@ describe('Onboarding', () => {
             const actual = addCallbackTransferError({
                 dfspName,
                 dfspCallbackUrl,
-                transferId,
                 authToken,
                 hostCentralLedger,
                 baseCentralLedgerAdmin,
@@ -770,7 +746,7 @@ describe('Onboarding', () => {
     });
 
     describe('setEmailNetDebitCapAdjustment', () => {
-        it('should return args to', () => {
+        it('should return args to set email for net debit cap adjustment', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const email = 'manager@dfsp';
@@ -814,7 +790,7 @@ describe('Onboarding', () => {
     });
 
     describe('setEmailSettlementTransferPositionChange', () => {
-        it('should return args to', () => {
+        it('should return args to set email for settlement transfer position change', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const email = 'manager@dfsp';
@@ -858,7 +834,7 @@ describe('Onboarding', () => {
     });
 
     describe('setEmailNetDebitCapThresholdBreach', () => {
-        it('should return args to', () => {
+        it('should return args to set email for net debit cap threshold breach', () => {
             // Arrange
             const dfspName = 'payerfsp';
             const email = 'manager@dfsp';
