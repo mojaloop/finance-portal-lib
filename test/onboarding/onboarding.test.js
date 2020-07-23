@@ -1,4 +1,5 @@
 const { Headers } = require('node-fetch');
+const AbortController = require('abort-controller');
 const {
     sendRequest,
     settlementIdFromHubAccounts,
@@ -31,12 +32,14 @@ describe('Onboarding', () => {
                 headers: {},
                 body: JSON.stringify({}),
                 redirect: 'follow',
+                signal: new AbortController().signal,
             }];
+            const timeout = 30000;
             const jestFetch = jest.fn();
             const expected = [request[0], request[1]];
 
             // Act
-            sendRequest(request, jestFetch);
+            sendRequest(request, timeout, jestFetch);
 
             // Assert
             expect(jestFetch).toBeCalledWith(...expected);
