@@ -35,7 +35,7 @@ describe('Onboarding', () => {
                 redirect: 'follow',
             };
             const request = [requestUrl, requestData];
-            const expected = [requestUrl, { ...requestData, signal: new AbortController().signal }]
+            const expected = [requestUrl, { ...requestData, signal: new AbortController().signal }];
             const timeout = 30000;
             const jestFetch = jest.fn();
 
