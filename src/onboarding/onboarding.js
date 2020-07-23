@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const AbortController = require('abort-controller');
 
 const { Headers } = fetch;
 
@@ -10,8 +11,22 @@ const { Headers } = fetch;
  *
  * @returns {Promise<void>} The result of the sent request
  */
-async function sendRequest(request, fetchFunc = fetch) {
-    return fetchFunc(...request);
+async function sendRequest(request, timeout = 30000, fetchFunc = fetch) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => { controller.abort(); }, timeout);
+    const [url, options] = request;
+
+    try {
+        const result = await fetchFunc(url, { ...options, signal: controller.signal });
+        clearTimeout(timeoutId);
+        return result;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out.');
+        }
+        throw error;
+    }
 }
 
 /**
