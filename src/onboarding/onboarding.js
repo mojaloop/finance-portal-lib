@@ -43,6 +43,47 @@ const settlementIdFromHubAccounts = (hubAccounts, dfspCurrency) => hubAccounts
     .id;
 
 /**
+ * Returns an array with args to create a hub account of the supplied type and currency
+ *
+ * @param options
+ * @param {string} options.authToken
+ * @param {string} options.hostCentralLedger
+ * @param {string} [options.fspiopSource]
+ *
+ * @returns {array} url, requestOptions
+ */
+function createHubAccount({
+    authToken,
+    hostCentralLedger,
+    type,
+    currency,
+    fspiopSource = 'hub_operator',
+}) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('FSPIOP-Source', fspiopSource);
+    headers.append('Authorization', `Bearer ${authToken}`);
+
+    const body = JSON.stringify({
+        type,
+        currency,
+    });
+
+    const requestOptions = {
+        method: 'POST',
+        headers,
+        body,
+        redirect: 'follow',
+    };
+
+    const endpoint = '/participants/Hub/accounts';
+
+    const url = `${hostCentralLedger}${endpoint}`;
+
+    return [url, requestOptions];
+}
+
+/**
  * Returns an array with args to get accounts for a given DFSP associated with the hub.
  *
  * @param options
@@ -50,7 +91,7 @@ const settlementIdFromHubAccounts = (hubAccounts, dfspCurrency) => hubAccounts
  * @param {string} options.authToken
  * @param {string} options.hostCentralLedger
  * @param {string} [options.fspiopSource]
- * ß
+ *
  * @returns {array} url, requestOptions
  */
 function getDfspAccounts({
@@ -859,6 +900,7 @@ function setEmailNetDebitCapThresholdBreach({
 module.exports = {
     sendRequest,
     settlementIdFromHubAccounts,
+    createHubAccount,
     getDfspAccounts,
     addDfsp,
     addInitialPositionAndLimits,

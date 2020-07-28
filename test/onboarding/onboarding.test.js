@@ -3,6 +3,7 @@ const AbortController = require('abort-controller');
 const {
     sendRequest,
     settlementIdFromHubAccounts,
+    createHubAccount,
     getDfspAccounts,
     addDfsp,
     addInitialPositionAndLimits,
@@ -75,6 +76,47 @@ describe('Onboarding', () => {
 
             // Act
             const actual = settlementIdFromHubAccounts(hubAccounts, currency);
+
+            // Assert
+            expect(actual).toEqual(expected);
+        });
+    });
+
+    describe('createHubAccount', () => {
+        it('should return args to create an account on the hub', () => {
+            // Arrange
+            const authToken = '4324sdfsfsdf2fsdffsdfs3';
+            const hostCentralLedger = 'http://localhost';
+            const fspiopSource = 'hub_operator';
+            const type = 'HUB_MULTILATERAL_SETTLEMENT';
+            const currency = 'XOF';
+            const headersMap = new Map();
+            headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
+            headersMap.set('Content-Type', 'application/json');
+            headersMap.set('FSPIOP-Source', 'hub_operator');
+            const headers = new Headers(headersMap);
+            const body = JSON.stringify({
+                type: 'HUB_MULTILATERAL_SETTLEMENT',
+                currency: 'XOF',
+            });
+            const expected = [
+                'http://localhost/participants/Hub/accounts',
+                {
+                    method: 'POST',
+                    headers,
+                    redirect: 'follow',
+                    body,
+                },
+            ];
+
+            // Act
+            const actual = createHubAccount({
+                type,
+                currency,
+                authToken,
+                hostCentralLedger,
+                fspiopSource,
+            });
 
             // Assert
             expect(actual).toEqual(expected);
