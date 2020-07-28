@@ -49,7 +49,6 @@ const settlementIdFromHubAccounts = (hubAccounts, dfspCurrency) => hubAccounts
  * @param {string} options.dfspName
  * @param {string} options.authToken
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  * ß
  * @returns {array} url, requestOptions
@@ -58,7 +57,6 @@ function getDfspAccounts({
     dfspName,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -74,7 +72,7 @@ function getDfspAccounts({
 
     const endpoint = `/participants/${dfspName}/accounts`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -87,7 +85,6 @@ function getDfspAccounts({
  * @param {string} options.dfspCurrency Three-letter currency string, e.g. EUR
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -97,7 +94,6 @@ function addDfsp({
     dfspCurrency,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -119,7 +115,7 @@ function addDfsp({
 
     const endpoint = '/participants';
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -134,7 +130,6 @@ function addDfsp({
  * @param {number} [options.initialPosition] Initial NDC position. Defaults to 0.
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -146,7 +141,6 @@ function addInitialPositionAndLimits({
     initialPosition = 0,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -172,7 +166,7 @@ function addInitialPositionAndLimits({
 
     const endpoint = `/participants/${dfspName}/initialPositionAndLimits`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -188,7 +182,6 @@ function addInitialPositionAndLimits({
  * @param {string} options.settlementAccountId
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -201,7 +194,6 @@ function depositFunds({
     settlementAccountId,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -235,7 +227,7 @@ function depositFunds({
 
     const endpoint = `/participants/${dfspName}/accounts/${settlementAccountId}`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -248,7 +240,6 @@ function depositFunds({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -258,7 +249,6 @@ function addCallbackParticipantPut({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -282,7 +272,7 @@ function addCallbackParticipantPut({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -295,7 +285,6 @@ function addCallbackParticipantPut({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -305,7 +294,6 @@ function addCallbackParticipantPutError({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -329,7 +317,7 @@ function addCallbackParticipantPutError({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -342,7 +330,6 @@ function addCallbackParticipantPutError({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -352,7 +339,6 @@ function addCallbackParticipantPutBatch({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -376,7 +362,7 @@ function addCallbackParticipantPutBatch({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -389,7 +375,6 @@ function addCallbackParticipantPutBatch({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -399,7 +384,6 @@ function addCallbackParticipantPutBatchError({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -423,7 +407,7 @@ function addCallbackParticipantPutBatchError({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -436,7 +420,6 @@ function addCallbackParticipantPutBatchError({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -446,7 +429,6 @@ function addCallbackPartiesGet({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -470,7 +452,7 @@ function addCallbackPartiesGet({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -483,7 +465,6 @@ function addCallbackPartiesGet({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -493,7 +474,6 @@ function addCallbackPartiesPut({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -517,7 +497,7 @@ function addCallbackPartiesPut({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -530,7 +510,6 @@ function addCallbackPartiesPut({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -540,7 +519,6 @@ function addCallbackPartiesPutError({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -564,7 +542,7 @@ function addCallbackPartiesPutError({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -577,7 +555,6 @@ function addCallbackPartiesPutError({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -587,7 +564,6 @@ function addCallbackQuotes({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -609,7 +585,7 @@ function addCallbackQuotes({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -622,7 +598,6 @@ function addCallbackQuotes({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -632,7 +607,6 @@ function addCallbackTransferPost({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -656,7 +630,7 @@ function addCallbackTransferPost({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -669,7 +643,6 @@ function addCallbackTransferPost({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -678,7 +651,6 @@ function addCallbackTransferPut({
     dfspName,
     dfspCallbackUrl,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     authToken, fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -702,7 +674,7 @@ function addCallbackTransferPut({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -715,7 +687,6 @@ function addCallbackTransferPut({
  * @param {string} options.dfspCallbackUrl
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -725,7 +696,6 @@ function addCallbackTransferError({
     dfspCallbackUrl,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -749,7 +719,7 @@ function addCallbackTransferError({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -762,7 +732,6 @@ function addCallbackTransferError({
  * @param {string} options.email
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -772,7 +741,6 @@ function setEmailNetDebitCapAdjustment({
     email,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -795,7 +763,7 @@ function setEmailNetDebitCapAdjustment({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -808,7 +776,6 @@ function setEmailNetDebitCapAdjustment({
  * @param {string} options.email
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -818,7 +785,6 @@ function setEmailSettlementTransferPositionChange({
     email,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -841,7 +807,7 @@ function setEmailSettlementTransferPositionChange({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
@@ -854,7 +820,6 @@ function setEmailSettlementTransferPositionChange({
  * @param {string} options.email
  * @param {string} options.authToken Hub account authorization token
  * @param {string} options.hostCentralLedger
- * @param {string} [options.baseCentralLedgerAdmin]
  * @param {string} [options.fspiopSource]
  *
  * @returns {array} url, requestOptions
@@ -864,7 +829,6 @@ function setEmailNetDebitCapThresholdBreach({
     email,
     authToken,
     hostCentralLedger,
-    baseCentralLedgerAdmin = '/admin/1.0',
     fspiopSource = 'hub_operator',
 }) {
     const headers = new Headers();
@@ -887,7 +851,7 @@ function setEmailNetDebitCapThresholdBreach({
 
     const endpoint = `/participants/${dfspName}/endpoints`;
 
-    const url = `${hostCentralLedger}${baseCentralLedgerAdmin}${endpoint}`;
+    const url = `${hostCentralLedger}${endpoint}`;
 
     return [url, requestOptions];
 }
