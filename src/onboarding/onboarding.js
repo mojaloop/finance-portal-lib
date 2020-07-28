@@ -49,7 +49,7 @@ const settlementIdFromHubAccounts = (hubAccounts, dfspCurrency) => hubAccounts
  * @param {string} options.authToken
  * @param {string} options.hostCentralLedger
  * @param {string} [options.fspiopSource]
- * ß
+ *
  * @returns {array} url, requestOptions
  */
 function createHubAccount({
@@ -91,7 +91,7 @@ function createHubAccount({
  * @param {string} options.authToken
  * @param {string} options.hostCentralLedger
  * @param {string} [options.fspiopSource]
- * ß
+ *
  * @returns {array} url, requestOptions
  */
 function getDfspAccounts({
