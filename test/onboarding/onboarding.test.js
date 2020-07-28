@@ -87,7 +87,6 @@ describe('Onboarding', () => {
             const dfspName = 'payerfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -95,7 +94,7 @@ describe('Onboarding', () => {
             headersMap.set('FSPIOP-Source', 'hub_operator');
             const headers = new Headers(headersMap);
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/accounts',
+                'http://localhost/participants/payerfsp/accounts',
                 {
                     method: 'GET',
                     headers,
@@ -108,7 +107,6 @@ describe('Onboarding', () => {
                 dfspName,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -124,7 +122,6 @@ describe('Onboarding', () => {
             const dfspCurrency = 'XOF';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -136,7 +133,7 @@ describe('Onboarding', () => {
                 currency: 'XOF',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants',
+                'http://localhost/participants',
                 {
                     method: 'POST',
                     headers,
@@ -151,7 +148,6 @@ describe('Onboarding', () => {
                 dfspCurrency,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -169,7 +165,6 @@ describe('Onboarding', () => {
             const initialPosition = 0;
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -185,7 +180,7 @@ describe('Onboarding', () => {
                 initialPosition: 0,
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/initialPositionAndLimits',
+                'http://localhost/participants/payerfsp/initialPositionAndLimits',
                 {
                     method: 'POST',
                     headers,
@@ -202,7 +197,6 @@ describe('Onboarding', () => {
                 initialPosition,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -221,7 +215,6 @@ describe('Onboarding', () => {
             const transferId = 'dee18631-6c40-438a-bdd0-67bac5e4e1c2';
             const settlementAccountId = 8;
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -245,7 +238,7 @@ describe('Onboarding', () => {
                 },
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/accounts/8',
+                'http://localhost/participants/payerfsp/accounts/8',
                 {
                     method: 'POST',
                     headers,
@@ -263,7 +256,6 @@ describe('Onboarding', () => {
                 settlementAccountId,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -279,7 +271,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -291,7 +282,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/participants/{{partyIdType}}/{{partyIdentifier}}',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -306,7 +297,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -324,7 +314,6 @@ describe('Onboarding', () => {
             const dfspPartyIdType = 'msisdn';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -336,7 +325,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/participants/{{partyIdType}}/{{partyIdentifier}}/error',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -353,7 +342,6 @@ describe('Onboarding', () => {
                 dfspPartyIdType,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -369,7 +357,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -381,7 +368,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/participants/{{requestId}}',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -396,7 +383,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -412,7 +398,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -424,7 +409,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/participants/{{requestId}}/error',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -439,7 +424,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -455,7 +439,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -467,7 +450,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/parties/{{partyIdType}}/{{partyIdentifier}}',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -482,7 +465,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -498,7 +480,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -510,7 +491,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/parties/{{partyIdType}}/{{partyIdentifier}}',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -525,7 +506,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -541,7 +521,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -553,7 +532,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/parties/{{partyIdType}}/{{partyIdentifier}}/error',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -568,7 +547,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -584,7 +562,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -596,7 +573,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -611,7 +588,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -627,7 +603,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -639,7 +614,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/transfers',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -654,7 +629,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -670,7 +644,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -682,7 +655,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/transfers/{{transferId}}',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -697,7 +670,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -713,7 +685,6 @@ describe('Onboarding', () => {
             const dfspCallbackUrl = 'http://dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -725,7 +696,7 @@ describe('Onboarding', () => {
                 value: 'http://dfsp/transfers/{{transferId}}/error',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -740,7 +711,6 @@ describe('Onboarding', () => {
                 dfspCallbackUrl,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -756,7 +726,6 @@ describe('Onboarding', () => {
             const email = 'manager@dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -769,7 +738,7 @@ describe('Onboarding', () => {
                 value: 'manager@dfsp',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -784,7 +753,6 @@ describe('Onboarding', () => {
                 email,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -800,7 +768,6 @@ describe('Onboarding', () => {
             const email = 'manager@dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -813,7 +780,7 @@ describe('Onboarding', () => {
                 value: 'manager@dfsp',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -828,7 +795,6 @@ describe('Onboarding', () => {
                 email,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
@@ -844,7 +810,6 @@ describe('Onboarding', () => {
             const email = 'manager@dfsp';
             const authToken = '4324sdfsfsdf2fsdffsdfs3';
             const hostCentralLedger = 'http://localhost';
-            const baseCentralLedgerAdmin = '/admin/1.0';
             const fspiopSource = 'hub_operator';
             const headersMap = new Map();
             headersMap.set('Authorization', 'Bearer 4324sdfsfsdf2fsdffsdfs3');
@@ -857,7 +822,7 @@ describe('Onboarding', () => {
                 value: 'manager@dfsp',
             });
             const expected = [
-                'http://localhost/admin/1.0/participants/payerfsp/endpoints',
+                'http://localhost/participants/payerfsp/endpoints',
                 {
                     method: 'POST',
                     headers,
@@ -872,7 +837,6 @@ describe('Onboarding', () => {
                 email,
                 authToken,
                 hostCentralLedger,
-                baseCentralLedgerAdmin,
                 fspiopSource,
             });
 
