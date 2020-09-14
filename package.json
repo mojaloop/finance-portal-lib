@@ -1,11 +1,12 @@
 {
   "name": "@mojaloop/finance-portal-lib",
-  "version": "0.0.20-snapshot",
+  "version": "0.1.0",
   "description": "Shared code for finance portal backends.",
   "license": "Apache-2.0",
   "contributors": [
     "Matt Kingston, ModusBox Inc.",
-    "Kamuela Franco <kamuela.franco@modusbox.com>"
+    "Kamuela Franco <kamuela.franco@modusbox.com>",
+    "Aaron Reynoza, <aaron.reynoza@modusbox.com>"
   ],
   "main": "src/index.js",
   "repository": {
