@@ -297,13 +297,13 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
                 const result = await getFxpRatesForChannel(
                     endpoint, currencyChannel, logger,
                 );
-                const fxpRates = result.rates.map(
+                const rates = result.rates.map(
                     (rate) => ({
                         ...rate,
                         currencyPair: `${currencyChannel.sourceCurrency}${currencyChannel.destinationCurrency}`,
                     }),
                 );
-                return fxpRates;
+                return { ...result, rates };
             },
         ),
     );
@@ -315,7 +315,6 @@ async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
             ratesPerCurrencyChannel[customChannelIdentifier] = item.rates;
         }
     });
-
     return ratesPerCurrencyChannel;
 }
 
