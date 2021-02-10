@@ -1,6 +1,6 @@
 {
   "name": "@mojaloop/finance-portal-lib",
-  "version": "11.0.0",
+  "version": "0.1.1",
   "description": "Shared code for finance portal backends.",
   "license": "Apache-2.0",
   "contributors": [
