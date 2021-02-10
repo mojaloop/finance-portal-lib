@@ -1,6 +1,6 @@
 {
   "name": "@mojaloop/finance-portal-lib",
-  "version": "0.1.0",
+  "version": "11.0.0",
   "description": "Shared code for finance portal backends.",
   "license": "Apache-2.0",
   "contributors": [
@@ -17,7 +17,7 @@
     "url": "https://github.com/mojaloop/finance-portal-lib/issues"
   },
   "dependencies": {
-    "abort-controller": "^3.0.0",
+    "abort-controller": "3.0.0",
     "big.js": "5.2.2",
     "node-fetch": "2.6.1",
     "uuid": "3.3.2",
@@ -47,7 +47,7 @@
     "fileTest": "node scripts/genTestFile.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "audit:resolve": "SHELL=sh resolve-audit && sed -i 's/: \"^/: \"/' package.json",
+    "audit:resolve": "SHELL=sh resolve-audit --production",
     "audit:check": "SHELL=sh check-audit"
   }
 }
