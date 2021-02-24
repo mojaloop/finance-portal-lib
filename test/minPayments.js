@@ -30,41 +30,45 @@ test('Check simple change of input ordering', t => {
 test('Check duplicate participants throws an error', t => {
     const [ x, y ] = support.randomSwitchCurrencyPair();
     const input = support.genInput({ data: () => [{ id: 1, amount: x }, { id: 1, amount: y }] });
-    t.throws(algo.bind(null, input), 'Participant appears more than once in settlement');
+    t.throws(algo.bind(null, input), { message: 'Participant appears more than once in settlement'});
 });
 
 test('Check mixed currencies throws an error', t => {
     // 50 random strings means almost no chance of all currencies being the same
     const input = support.genInput({ minTx: 50, maxTx: 50, currency: () => chance.string(), fixed: 0 });
-    t.throws(algo.bind(null, input), 'Not all currencies are the same');
+    t.throws(algo.bind(null, input), { message: 'Not all currencies are the same'});
 });
 
 test('Check invalid currency throws an error', t => {
     const curr = 'ABCD'; // none have a four-digit code
     const data = () => support.genDataSimple({ maxTx: 1, minTx: 1 });
     const input = support.genInput({ currency: () => curr, data, fixed: 0 });
-    t.throws(algo.bind(null, input), new RegExp(`Unsupported currency ${curr}. Add a new currency to currencies\.json`));
+    t.throws(algo.bind(null, input), { message: new RegExp(`Unsupported currency ${curr}. Add a new currency to currencies\.json`)});
 });
 
 test('Check invalid settlement amount throws an error', t => {
     const curr = 'USD';
     const data = () => support.genDataSimple({ maxTx: 1, minTx: 1 }).map(v => ({ ...v, amount: v.amount + '12345' }));
     const input = support.genInput({ currency: () => curr, data });
-    t.throws(algo.bind(null, input),
-        new RegExp(`${curr} allows ${currencies[curr].dp} decimal places. Participants \\d+, \\d+ have invalid settlement amounts of -?\\d+(\\.\\d+)?, -?\\d+(\\.\\d+)? respectively.*`));
+    t.throws(
+        algo.bind(null, input),
+        { 
+            message: new RegExp(`${curr} allows ${currencies[curr].dp} decimal places. Participants \\d+, \\d+ have invalid settlement amounts of -?\\d+(\\.\\d+)?, -?\\d+(\\.\\d+)? respectively.*`)
+        }
+    );
 });
 
 test('Check non-zero-sum amounts throw an error', t => {
     const data = () => support.genDataSimple({ minTx: 10 }).map(v => ({ ...v, amount: Decimal(v.amount).plus(chance.integer()) }));
     const input = support.genInput({ data });
-    t.throws(algo.bind(null, input), /Creditors and debtors do not sum to zero, they sum to -?\d+(\.\d+)?/);
+    t.throws(algo.bind(null, input), { message: /Creditors and debtors do not sum to zero, they sum to -?\d+(\.\d+)?/ });
 });
 
 test('Test invalid input missing creditors', t => {
     const [ x, y ] = support.randomSwitchCurrencyPair();
     let input = support.genInput({ data: () => [{ id: 1, amount: x }, { id: 2, amount: y }] });
     input.participants.pop();
-    t.throws(algo.bind(null, input), /Creditors and debtors do not sum to zero, they sum to -?\d+(\.\d+)?/);
+    t.throws(algo.bind(null, input), { message: /Creditors and debtors do not sum to zero, they sum to -?\d+(\.\d+)?/ });
 });
 
 test('Test pathological floating-point values', t => {
