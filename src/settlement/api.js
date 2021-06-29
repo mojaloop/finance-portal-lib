@@ -66,7 +66,7 @@ class SettlementsModel {
         return await get(`settlementWindows/${id}`, this.options);
     }
 
-/**
+    /**
      * Returns settlement windows based on the query provided.
      *
      * 'query' must contain at least one property, as per the settlements API. The 'query' object
