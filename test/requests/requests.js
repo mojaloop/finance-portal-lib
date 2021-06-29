@@ -38,7 +38,7 @@ describe('Requests:', () => {
     describe('Public functions:', () => {
         describe('get:', () => {
             describe('Failures:', () => {
-                it('calls only `optLog` and throws an error if `buildUrl` throws an exception.', async () => {
+                it('throws an error if `buildUrl` throws an exception.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockBuildUrl = () => {
@@ -61,7 +61,7 @@ describe('Requests:', () => {
 
                     mockBuildUrlRestore();
                 });
-                it('calls only `optLog` and throws an error if `fetch` fails.', async () => {
+                it('throws an error if `fetch` fails.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockFetch = async () => Promise.reject(fakeError);
@@ -155,7 +155,7 @@ describe('Requests:', () => {
         });
         describe('post:', () => {
             describe('Failures:', () => {
-                it('calls only `optLog` and throws an error if `buildUrl` throws an exception.', async () => {
+                it('throws an error if `buildUrl` throws an exception.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockBuildUrl = () => {
@@ -178,7 +178,7 @@ describe('Requests:', () => {
 
                     mockBuildUrlRestore();
                 });
-                it('calls only `optLog` and throws an error if `fetch` fails.', async () => {
+                it('throws an error if `fetch` fails.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockFetch = async () => Promise.reject(fakeError);
@@ -318,7 +318,7 @@ describe('Requests:', () => {
         });
         describe('put:', () => {
             describe('Failures:', () => {
-                it('calls only `optLog` and throws an error if `buildUrl` throws an exception.', async () => {
+                it('throws an error if `buildUrl` throws an exception.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockBuildUrl = () => {
@@ -341,7 +341,7 @@ describe('Requests:', () => {
 
                     mockBuildUrlRestore();
                 });
-                it('calls only `optLog` and throws an error if `fetch` fails.', async () => {
+                it('throws an error if `fetch` fails.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockFetch = async () => Promise.reject(fakeError);
@@ -481,7 +481,7 @@ describe('Requests:', () => {
         });
         describe('del:', () => {
             describe('Failures:', () => {
-                it('calls only `optLog` and throws an error if `buildUrl` throws an exception.', async () => {
+                it('throws an error if `buildUrl` throws an exception.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockBuildUrl = () => {
@@ -504,7 +504,7 @@ describe('Requests:', () => {
 
                     mockBuildUrlRestore();
                 });
-                it('calls only `optLog` and throws an error if `fetch` fails.', async () => {
+                it('throws an error if `fetch` fails.', async () => {
                     const fakeError = new Error('foo');
 
                     const mockFetch = async () => Promise.reject(fakeError);

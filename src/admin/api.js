@@ -13,8 +13,8 @@ const FOREX_PROVIDERS = {
  *
  * @returns {object}
  */
-async function getParticipantAccounts(endpoint, participantName, logger) {
-    const accounts = await get(`participants/${participantName}/accounts`, { endpoint, logger });
+async function getParticipantAccounts(endpoint, participantName) {
+    const accounts = await get(`participants/${participantName}/accounts`, { endpoint });
     return accounts;
 }
 
@@ -23,9 +23,9 @@ async function getParticipantAccounts(endpoint, participantName, logger) {
  *
  * @returns {object}
  */
-async function getAccountById(endpoint, participantName, accountId, logger) {
+async function getAccountById(endpoint, participantName, accountId) {
     const accountIdNum = Number(accountId);
-    const accounts = await getParticipantAccounts(endpoint, participantName, logger);
+    const accounts = await getParticipantAccounts(endpoint, participantName);
     const account = accounts.find((a) => a.id === accountIdNum);
     if (account === undefined) {
         throw new Error(`Couldn't find account with id ${accountId}`);
@@ -38,8 +38,8 @@ async function getAccountById(endpoint, participantName, accountId, logger) {
  *
  * @returns {object}
  */
-async function getAccountByType(endpoint, participantName, currency, accountType, logger) {
-    const accounts = await getParticipantAccounts(endpoint, participantName, logger);
+async function getAccountByType(endpoint, participantName, currency, accountType) {
+    const accounts = await getParticipantAccounts(endpoint, participantName);
     const account = accounts
         .filter((a) => a.currency === currency)
         .find((ac) => ac.ledgerAccountType === accountType);
@@ -54,8 +54,8 @@ async function getAccountByType(endpoint, participantName, currency, accountType
  *
  * @returns {object}
  */
-async function getParticipant(endpoint, participantName, logger) {
-    const result = await get(`participants/${participantName}`, { endpoint, logger });
+async function getParticipant(endpoint, participantName) {
+    const result = await get(`participants/${participantName}`, { endpoint });
     return result;
 }
 
@@ -64,8 +64,8 @@ async function getParticipant(endpoint, participantName, logger) {
  *
  * @returns {object}
  */
-async function getParticipants(endpoint, logger) {
-    const result = await get('participants', { endpoint, logger });
+async function getParticipants(endpoint) {
+    const result = await get('participants', { endpoint });
     return result;
 }
 
@@ -74,8 +74,8 @@ async function getParticipants(endpoint, logger) {
  *
  * @returns {object}
  */
-async function getParticipantEmailAddresses(endpoint, participantName, logger) {
-    const participantEndpoints = await get(buildUrl('participants', participantName, 'endpoints'), { endpoint, logger });
+async function getParticipantEmailAddresses(endpoint, participantName) {
+    const participantEndpoints = await get(buildUrl('participants', participantName, 'endpoints'), { endpoint });
     const emailAddresses = participantEndpoints.filter((a) => a.type.endsWith('_EMAIL'));
     return emailAddresses;
 }
@@ -84,9 +84,9 @@ async function getParticipantEmailAddresses(endpoint, participantName, logger) {
  * Updates participant email address for a notification type
  * @returns {object}
  */
-async function updateEmailAddress(endpoint, dfspName, emailType, newEmailAddress, logger) {
+async function updateEmailAddress(endpoint, dfspName, emailType, newEmailAddress) {
     const newEndPoint = { type: emailType, value: newEmailAddress };
-    const result = await post(buildUrl('participants', dfspName, 'endpoints'), newEndPoint, { endpoint, logger });
+    const result = await post(buildUrl('participants', dfspName, 'endpoints'), newEndPoint, { endpoint });
     return result;
 }
 
@@ -95,8 +95,8 @@ async function updateEmailAddress(endpoint, dfspName, emailType, newEmailAddress
  *
  * @returns {object}
  */
-async function getNDC(endpoint, dfspName, currency, logger) {
-    const limits = await get(buildUrl('participants', dfspName, 'limits'), { endpoint, logger });
+async function getNDC(endpoint, dfspName, currency) {
+    const limits = await get(buildUrl('participants', dfspName, 'limits'), { endpoint });
     const ndc = limits.find((l) => l.currency === currency && l.limit.type === 'NET_DEBIT_CAP');
     if (ndc === undefined) {
         throw new Error(`Couldn't find ${currency} net debit cap for participant ${dfspName}`);
@@ -118,10 +118,10 @@ async function getNDC(endpoint, dfspName, currency, logger) {
  *
  * @returns {object}
  */
-async function setNDC(endpoint, dfspName, currency, newAmount, logger) {
+async function setNDC(endpoint, dfspName, currency, newAmount) {
     const ndc = await getNDC(endpoint, dfspName, currency);
     const newNDC = { currency, limit: { ...ndc.limit, value: newAmount } };
-    const result = await put(buildUrl('participants', dfspName, 'limits'), newNDC, { endpoint, logger });
+    const result = await put(buildUrl('participants', dfspName, 'limits'), newNDC, { endpoint });
     return result;
 }
 
@@ -130,8 +130,8 @@ async function setNDC(endpoint, dfspName, currency, newAmount, logger) {
  *
  * @returns {object}
  */
-async function getParticipantByAccountId(endpoint, accountId, logger) {
-    const participants = await get('participants', { endpoint, logger });
+async function getParticipantByAccountId(endpoint, accountId) {
+    const participants = await get('participants', { endpoint });
     // match participant account id to get the fsp name
     const fsp = participants.find((p) => p.accounts.findIndex((a) => a.id === accountId) !== -1);
     if (fsp.name === undefined) {
@@ -146,7 +146,7 @@ async function getParticipantByAccountId(endpoint, accountId, logger) {
  * @returns {object}
  */
 async function participantFundsOutPrepareReserve(
-    endpoint, participantName, accountId, amount, currency, reason, logger,
+    endpoint, participantName, accountId, amount, currency, reason,
     { transferId = uuidv4() } = {},
 ) {
     // TODO: should really take the participant as argument
@@ -159,7 +159,7 @@ async function participantFundsOutPrepareReserve(
             amount,
             currency,
         },
-    }, { endpoint, logger });
+    }, { endpoint });
     return { transferId };
 }
 
@@ -168,11 +168,11 @@ async function participantFundsOutPrepareReserve(
  *
  * @returns {object}
  */
-async function fundsOutPrepareReserve(endpoint, accountId, amount, currency, reason, logger) {
+async function fundsOutPrepareReserve(endpoint, accountId, amount, currency, reason) {
     // TODO: should really take the participant as argument
     const fsp = await getParticipantByAccountId(endpoint, accountId);
     const result = await participantFundsOutPrepareReserve(
-        endpoint, fsp.name, accountId, amount, currency, reason, logger,
+        endpoint, fsp.name, accountId, amount, currency, reason,
     );
     return result;
 }
@@ -183,7 +183,7 @@ async function fundsOutPrepareReserve(endpoint, accountId, amount, currency, rea
  * @returns {object}
  */
 async function participantFundsInReserve(
-    endpoint, participantName, accountId, amount, reason, currency, logger,
+    endpoint, participantName, accountId, amount, reason, currency,
     { transferId = uuidv4() } = {},
 ) {
     await post(`participants/${participantName}/accounts/${accountId}`, {
@@ -195,7 +195,7 @@ async function participantFundsInReserve(
             amount,
             currency,
         },
-    }, { endpoint, logger });
+    }, { endpoint });
     return { transferId };
 }
 
@@ -204,11 +204,11 @@ async function participantFundsInReserve(
  *
  * @returns {object}
  */
-async function fundsInReserve(endpoint, accountId, amount, reason, currency, logger) {
+async function fundsInReserve(endpoint, accountId, amount, reason, currency) {
     // TODO: should really take the participant as argument
     const fsp = await getParticipantByAccountId(endpoint, accountId);
     return participantFundsInReserve(
-        endpoint, fsp.name, accountId, amount, reason, currency, logger,
+        endpoint, fsp.name, accountId, amount, reason, currency,
     );
 }
 
@@ -217,9 +217,9 @@ async function fundsInReserve(endpoint, accountId, amount, reason, currency, log
  *
  * @returns {object}
  */
-async function setParticipantIsActiveFlag(endpoint, dfspName, value, logger) {
+async function setParticipantIsActiveFlag(endpoint, dfspName, value) {
     const payload = { isActive: value };
-    const result = await put(buildUrl('participants', dfspName), payload, { endpoint, logger });
+    const result = await put(buildUrl('participants', dfspName), payload, { endpoint });
     return result;
 }
 
@@ -227,11 +227,10 @@ async function setParticipantIsActiveFlag(endpoint, dfspName, value, logger) {
  * @function getFxpCurrencyChannels
  * @private
  * @param {string} endpoint
- * @param {object} logger
  * @returns {Promise<*>}
  */
-async function getFxpCurrencyChannels(endpoint, logger) {
-    const result = await get('exchange-rates/channels', { endpoint, logger });
+async function getFxpCurrencyChannels(endpoint) {
+    const result = await get('exchange-rates/channels', { endpoint });
     return result;
 }
 
@@ -240,11 +239,10 @@ async function getFxpCurrencyChannels(endpoint, logger) {
  * @private
  * @param {string} endpoint
  * @param channel
- * @param {object} logger
  * @returns {object}
  */
-async function getFxpRatesForChannel(endpoint, channel, logger) {
-    const rates = await get(`exchange-rates/channels/${channel.id}/rates`, { endpoint, logger });
+async function getFxpRatesForChannel(endpoint, channel) {
+    const rates = await get(`exchange-rates/channels/${channel.id}/rates`, { endpoint });
 
     return {
         channel,
@@ -269,7 +267,6 @@ function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
  *
  * @function getFxpRatesPerCurrencyChannel
  * @param {string} endpoint
- * @param {object} logger
  * @returns {object} An array of objects listing the exchange rates per currency channel, formatted:
  *  {
  *      <{string} the currency channel identifier. Format: concatenation of source and destination
@@ -289,13 +286,13 @@ function buildCustomFxpChannelIdentifier(fxpCurrencyChannel) {
  *      ]
  *  }
  */
-async function getFxpRatesPerCurrencyChannel(endpoint, logger) {
-    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+async function getFxpRatesPerCurrencyChannel(endpoint) {
+    const currencyChannels = await getFxpCurrencyChannels(endpoint);
     const ratesForAllCurrencyChannels = await Promise.all(
         currencyChannels.map(
             async (currencyChannel) => {
                 const result = await getFxpRatesForChannel(
-                    endpoint, currencyChannel, logger,
+                    endpoint, currencyChannel,
                 );
                 const rates = result.rates.map(
                     (rate) => ({
@@ -445,10 +442,9 @@ function getForexProviderInfo(forexProviderName, currencyPair, rateDetails) {
  * @param {string} currencyPair The currencies of the target channel, in a single concatenated
  * string with format "<source><destination>", as in this example: "eurusd".
  * @param {object} rateDetails
- * @param {object} logger
  * @returns {Promise<*>} The result from the FXP API.
  */
-async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetails, logger) {
+async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetails) {
     const sourceCurrency = extractSourceCurrency(currencyPair);
     const destinationCurrency = extractDestinationCurrency(currencyPair);
     const body = {
@@ -461,7 +457,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
           || getForexProviderInfo(FOREX_PROVIDERS.CITI, currencyPair, rateDetails),
     };
 
-    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const currencyChannels = await getFxpCurrencyChannels(endpoint);
     const targetChannel = currencyChannels
         .find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase()
             === sourceCurrency.toLowerCase()
@@ -471,7 +467,7 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
         throw new Error('FXP API error - Currency channel not found.');
     }
 
-    const result = await post(`exchange-rates/channels/${targetChannel.id}/rates`, body, { endpoint, logger });
+    const result = await post(`exchange-rates/channels/${targetChannel.id}/rates`, body, { endpoint });
 
     return result;
 }
@@ -483,14 +479,13 @@ async function createFxpRateForCurrencyChannel(endpoint, currencyPair, rateDetai
  * @param {string} endpoint
  * @param {string} currencyPair The currencies of the target channel, in a single concatenated
  * string with format "<source><destination>", as in this example: "eurusd".
- * @param {object} logger
  * @returns {Promise<*>} The result from the FXP API.
  */
-async function deleteFxpCurrencyChannel(endpoint, currencyPair, logger) {
+async function deleteFxpCurrencyChannel(endpoint, currencyPair) {
     const sourceCurrency = extractSourceCurrency(currencyPair);
     const destinationCurrency = extractDestinationCurrency(currencyPair);
 
-    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const currencyChannels = await getFxpCurrencyChannels(endpoint);
     const targetChannel = currencyChannels
         .find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase()
             === sourceCurrency.toLowerCase()
@@ -500,7 +495,7 @@ async function deleteFxpCurrencyChannel(endpoint, currencyPair, logger) {
         return { ok: true };
     }
 
-    const result = await del(`exchange-rates/channels/${targetChannel.id}`, { endpoint, logger });
+    const result = await del(`exchange-rates/channels/${targetChannel.id}`, { endpoint });
 
     return result;
 }
@@ -514,10 +509,9 @@ async function deleteFxpCurrencyChannel(endpoint, currencyPair, logger) {
  * @param {string} currencyPair The currencies of the target channel, in a single concatenated
  * string with format "<source><destination>", as in this example: "eurusd".
  * @param {object} channelDetails
- * @param {object} logger
  * @returns {Promise<*>} The result from the FXP API.
  */
-async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, logger) {
+async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails) {
     const sourceCurrency = extractSourceCurrency(currencyPair);
     const destinationCurrency = extractDestinationCurrency(currencyPair);
     const body = {
@@ -525,7 +519,7 @@ async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, 
         destinationCurrency: destinationCurrency.toUpperCase(),
         ...channelDetails,
     };
-    const currencyChannels = await getFxpCurrencyChannels(endpoint, logger);
+    const currencyChannels = await getFxpCurrencyChannels(endpoint);
     const targetChannel = currencyChannels
         .find((currencyChannel) => currencyChannel.sourceCurrency.toLowerCase()
             === sourceCurrency.toLowerCase()
@@ -535,7 +529,7 @@ async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, 
         throw new Error('FXP API error - Currency channel already exists.');
     }
 
-    const result = await post('exchange-rates/channels', body, { endpoint, logger });
+    const result = await post('exchange-rates/channels', body, { endpoint });
 
     return result;
 }
@@ -545,15 +539,14 @@ async function createFxpCurrencyChannel(endpoint, currencyPair, channelDetails, 
  * @function commitSettlementWindow
  * @param {string} endpoint
  * @param {number} settlementWindowId
- * @param {object} logger
  * @returns {Promise<*>} The result from the TMF API.
  */
-async function commitSettlementWindow(endpoint, settlementWindowId, logger) {
+async function commitSettlementWindow(endpoint, settlementWindowId) {
     const body = {
         hubSettlementId: settlementWindowId,
     };
 
-    const result = await post('settlement/phase-two', body, { endpoint, logger });
+    const result = await post('settlement/phase-two', body, { endpoint });
 
     return result;
 }

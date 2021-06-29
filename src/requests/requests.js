@@ -37,13 +37,7 @@ const buildUrl = (...args) => args
     .join('/')
     + ((args[args.length - 1].slice(-1) === '/') ? '/' : '');
 
-const optLog = (opts, ...args) => {
-    if (opts && opts.logger) {
-        opts.logger(...args);
-    }
-};
-
-const throwOrJson = async (res, msg = `HTTP request ${res.url} returned error response ${res.status}`) => {
+const throwOrJson = ({ body }) => async (res, msg = `HTTP request ${res.url} returned error response ${res.status}`) => {
     if (res.headers.get('content-length') === '0' || res.status === 204) {
         return null;
     }
@@ -51,72 +45,59 @@ const throwOrJson = async (res, msg = `HTTP request ${res.url} returned error re
     if (res.ok) {
         return resp;
     }
-    throw new HTTPResponseError({ msg, res, resp });
+    throw new HTTPResponseError({
+        request: {
+            body, endpoint: res.url,
+        },
+        msg,
+        res,
+        resp,
+    });
 };
 
 
 // TODO: if we destructure the function parameters like so:
-// async function get(url, { endpoint = 'http://localhost:3000', logger = () => {} } = {}) {
-// we can get rid of the optLog function, and better communicate to the consumers of this module
-// what options they're supposed to provide.
+// async function get(url, { endpoint = 'http://localhost:3000' } = {}) {
+// we can better communicate to the consumers of this module what options they're supposed to
+// provide.
 async function get(url, opts) {
-    try {
-        const reqOpts = {
-            method: 'GET',
-            headers: opts.headers || DEFAULT_HEADERS,
-        };
+    const reqOpts = {
+        method: 'GET',
+        headers: opts.headers || DEFAULT_HEADERS,
+    };
 
-        return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
-    } catch (e) {
-        optLog(opts, util.format('Error attempting GET. URL:', url, 'Opts:', opts, 'Error:', e));
-        throw e;
-    }
+    return fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson(reqOpts));
 }
 
 
 async function put(url, body, opts) {
-    try {
-        const reqOpts = {
-            method: 'PUT',
-            headers: opts.headers || DEFAULT_HEADERS,
-            body: opts.json === false ? body : JSON.stringify(body),
-        };
+    const reqOpts = {
+        method: 'PUT',
+        headers: opts.headers || DEFAULT_HEADERS,
+        body: opts.json === false ? body : JSON.stringify(body),
+    };
 
-        return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
-    } catch (e) {
-        optLog(opts, util.format('Error attempting PUT. URL:', url, 'Opts:', opts, 'Body:', body, 'Error:', e));
-        throw e;
-    }
+    return fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson(reqOpts));
 }
 
 
 async function post(url, body, opts) {
-    try {
-        const reqOpts = {
-            method: 'POST',
-            headers: opts.headers || DEFAULT_HEADERS,
-            body: opts.json === false ? body : JSON.stringify(body),
-        };
+    const reqOpts = {
+        method: 'POST',
+        headers: opts.headers || DEFAULT_HEADERS,
+        body: opts.json === false ? body : JSON.stringify(body),
+    };
 
-        return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
-    } catch (e) {
-        optLog(opts, util.format('Error attempting POST. URL:', url, 'Opts:', opts, 'Body:', body, 'Error:', e));
-        throw e;
-    }
+    return fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson(reqOpts));
 }
 
 async function del(url, opts) {
-    try {
-        const reqOpts = {
-            method: 'DELETE',
-            headers: opts.headers || DEFAULT_HEADERS,
-        };
+    const reqOpts = {
+        method: 'DELETE',
+        headers: opts.headers || DEFAULT_HEADERS,
+    };
 
-        return await fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson);
-    } catch (e) {
-        optLog(opts, util.format('Error attempting DELETE. URL:', url, 'Opts:', opts, 'Error:', e));
-        throw e;
-    }
+    return fetch(buildUrl(opts.endpoint, url), reqOpts).then(throwOrJson(reqOpts));
 }
 
 module.exports = {

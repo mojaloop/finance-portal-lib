@@ -246,7 +246,6 @@ describe('API:', () => {
                         endTime: '2019-09-05T12:00:00.000Z',
                         reuse: true,
                     }],
-                    logger: {},
                 };
                 // stub all private functions that are used inside the method, in order to avoid
                 // duplication of code. Re-stub each one individually only when needed in each test.
@@ -287,8 +286,7 @@ describe('API:', () => {
 
                     await assert.rejects(
                         async () => {
-                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                                mockData.logger);
+                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
                         },
                         {
                             name: fakeError.name,
@@ -305,8 +303,7 @@ describe('API:', () => {
 
                     await assert.rejects(
                         async () => {
-                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                                mockData.logger);
+                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
                         },
                         {
                             name: fakeError.name,
@@ -323,8 +320,7 @@ describe('API:', () => {
 
                     await assert.rejects(
                         async () => {
-                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                                mockData.logger);
+                            await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
                         },
                         {
                             name: fakeError.name,
@@ -339,8 +335,7 @@ describe('API:', () => {
 
                     getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', stub);
 
-                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
+                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
 
                     assert.deepEqual(result, {});
                 });
@@ -353,8 +348,7 @@ describe('API:', () => {
                     getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', stub1);
                     getFxpRatesForChannelRestore = api.__set__('getFxpRatesForChannel', stub2);
 
-                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
+                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
 
                     assert.deepEqual(result, {});
                 });
@@ -373,8 +367,7 @@ describe('API:', () => {
                     const expectedResult = {
                         [mockData.customChannelIdentifiers[0]]: [mockData.fxpRates[0]],
                     };
-                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
+                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
 
                     assert.deepEqual(result, expectedResult);
                 });
@@ -387,8 +380,7 @@ describe('API:', () => {
                         [mockData.customChannelIdentifiers[0]]: [mockData.fxpRates[0]],
                         [mockData.customChannelIdentifiers[1]]: [mockData.fxpRates[1]],
                     };
-                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
+                    const result = await api.getFxpRatesPerCurrencyChannel(mockData.endpoint);
 
                     assert.deepEqual(result, expectedResult);
                 });
@@ -428,7 +420,6 @@ describe('API:', () => {
                     currencyPair: 'eurmad',
                     destinationCurrency: 'mad',
                     endpoint: 'http://fake-endpoint.mojaloop',
-                    logger: () => {},
                     rateDetails: {
                         rate: 666667,
                         decimalRate: 4,
@@ -486,8 +477,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpRateForCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.currencyPair,
-                                mockData.logger);
+                                mockData.currencyPair);
                         },
                         {
                             name: fakeError.name,
@@ -505,8 +495,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpRateForCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.rateDetails,
-                                mockData.logger);
+                                mockData.rateDetails);
                         },
                         {
                             name: fakeError.name,
@@ -524,8 +513,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpRateForCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.rateDetails,
-                                mockData.logger);
+                                mockData.rateDetails);
                         },
                         {
                             name: fakeError.name,
@@ -544,8 +532,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpRateForCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.rateDetails,
-                                mockData.logger);
+                                mockData.rateDetails);
                         },
                         {
                             name: fakeError.name,
@@ -559,8 +546,7 @@ describe('API:', () => {
                     const expectedResult = { ok: true };
                     const result = await api.createFxpRateForCurrencyChannel(mockData.endpoint,
                         mockData.currencyPair,
-                        mockData.rateDetails,
-                        mockData.logger);
+                        mockData.rateDetails);
 
                     assert.strictEqual(postStub.getCall(0).args[0], 'exchange-rates/channels/0/rates');
                     assert.deepEqual(postStub.getCall(0).args[1], {
@@ -573,7 +559,6 @@ describe('API:', () => {
                     });
                     assert.deepEqual(postStub.getCall(0).args[2], {
                         endpoint: mockData.endpoint,
-                        logger: mockData.logger,
                     });
                     assert.deepEqual(result, expectedResult);
                 });
@@ -613,7 +598,6 @@ describe('API:', () => {
                     currencyPair: 'eurmad',
                     destinationCurrency: 'mad',
                     endpoint: 'http://fake-endpoint.mojaloop',
-                    logger: () => {},
                     channelDetails: {
                         status: 'Approved',
                     },
@@ -647,8 +631,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.channelDetails,
-                                mockData.logger);
+                                mockData.channelDetails);
                         },
                         {
                             name: fakeError.name,
@@ -666,8 +649,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.channelDetails,
-                                mockData.logger);
+                                mockData.channelDetails);
                         },
                         {
                             name: fakeError.name,
@@ -685,8 +667,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.channelDetails,
-                                mockData.logger);
+                                mockData.channelDetails);
                         },
                         {
                             name: fakeError.name,
@@ -702,8 +683,7 @@ describe('API:', () => {
                         async () => {
                             await api.createFxpCurrencyChannel(mockData.endpoint,
                                 mockData.currencyPair,
-                                mockData.channelDetails,
-                                mockData.logger);
+                                mockData.channelDetails);
                         },
                         {
                             name: fakeError.name,
@@ -717,8 +697,7 @@ describe('API:', () => {
                     const expectedResult = { ok: true };
                     const result = await api.createFxpCurrencyChannel(mockData.endpoint,
                         mockData.currencyPair,
-                        mockData.channelDetails,
-                        mockData.logger);
+                        mockData.channelDetails);
 
                     assert.strictEqual(postStub.getCall(0).args[0], 'exchange-rates/channels');
                     assert.deepEqual(postStub.getCall(0).args[1], {
@@ -728,7 +707,6 @@ describe('API:', () => {
                     });
                     assert.deepEqual(postStub.getCall(0).args[2], {
                         endpoint: mockData.endpoint,
-                        logger: mockData.logger,
                     });
                     assert.deepEqual(result, expectedResult);
                 });
@@ -765,7 +743,6 @@ describe('API:', () => {
                     ],
                     customChannelIdentifiers: ['eurmad', 'madeur'],
                     endpoint: 'http://fake-endpoint.mojaloop',
-                    logger: {},
                 };
                 // stub all private functions that are used inside the method, in order to avoid
                 // duplication of code. Re-stub each one individually only when needed in each test.
@@ -788,8 +765,7 @@ describe('API:', () => {
 
                     await assert.rejects(
                         async () => {
-                            await api.deleteFxpCurrencyChannel(mockData.endpoint,
-                                mockData.logger);
+                            await api.deleteFxpCurrencyChannel(mockData.endpoint);
                         },
                         {
                             name: fakeError.name,
@@ -800,16 +776,14 @@ describe('API:', () => {
             });
             describe('Success:', () => {
                 it('should return success if currency channel is deleted successfully', async () => {
-                    const result = await api.deleteFxpCurrencyChannel(mockData.endpoint,
-                        mockData.logger);
+                    const result = await api.deleteFxpCurrencyChannel(mockData.endpoint);
                     assert.deepEqual(result, { ok: true });
                 });
             });
             it('should return success if channel does not exist.', async () => {
                 getFxpCurrencyChannelsRestore = api.__set__('getFxpCurrencyChannels', sinon.stub().resolves([]));
 
-                const result = await api.deleteFxpCurrencyChannel(mockData.endpoint,
-                    mockData.logger);
+                const result = await api.deleteFxpCurrencyChannel(mockData.endpoint);
                 assert.deepEqual(result, { ok: true });
             });
         });
@@ -824,7 +798,6 @@ describe('API:', () => {
                 // a test case alters them.
                 mockData = {
                     endpoint: 'http://fake-endpoint.mojaloop',
-                    logger: () => {},
                     settlementWindowId: 12345,
                 };
 
@@ -845,8 +818,7 @@ describe('API:', () => {
                     await assert.rejects(
                         async () => {
                             await api.commitSettlementWindow(mockData.endpoint,
-                                mockData.settlementWindowId,
-                                mockData.logger);
+                                mockData.settlementWindowId);
                         },
                         {
                             name: fakeError.name,
@@ -859,8 +831,7 @@ describe('API:', () => {
                 it('should return the result of the `requests.post` if it succeeds.', async () => {
                     const expectedResult = { ok: true };
                     const result = await api.commitSettlementWindow(mockData.endpoint,
-                        mockData.settlementWindowId,
-                        mockData.logger);
+                        mockData.settlementWindowId);
 
                     assert.strictEqual(postStub.getCall(0).args[0], 'settlement/phase-two');
                     assert.deepEqual(postStub.getCall(0).args[1], {
@@ -868,7 +839,6 @@ describe('API:', () => {
                     });
                     assert.deepEqual(postStub.getCall(0).args[2], {
                         endpoint: mockData.endpoint,
-                        logger: mockData.logger,
                     });
                     assert.deepEqual(result, expectedResult);
                 });
